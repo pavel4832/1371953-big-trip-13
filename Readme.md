@@ -1,7 +1,7 @@
 # Проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Павел Ульянов](https://up.htmlacademy.ru/ecmascript/13/user/1371953).
-* Наставник: `Неизвестно`.
+* Наставник: [Ксения Толстых](https://htmlacademy.ru/profile/id618277).
 
 ---
 
