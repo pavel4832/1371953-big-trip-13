@@ -8,13 +8,13 @@ import {createEventsItemTemplate} from "./view/events-item.js";
 import {createEventsEditorTemplate} from "./view/events-edit.js";
 import {createEventsNewTemplate} from "./view/events-new.js";
 
+const EVENT_COUNT = 3;
 const siteHeaderElement = document.querySelector(`.page-header`);
 const siteMainElement = document.querySelector(`.page-main`);
 const siteTripMainElement = siteHeaderElement.querySelector(`.trip-main`);
 const [siteMenuHeader, siteFilterHeader] = siteTripMainElement.querySelectorAll(`h2`);
 const siteEventsElement = siteMainElement.querySelector(`.trip-events`);
 const siteEventsHeader = siteEventsElement.querySelector(`h2`);
-const EVENT_COUNT = 3;
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
