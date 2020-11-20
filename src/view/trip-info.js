@@ -3,7 +3,7 @@ export const createTripInfoTemplate = (events) => {
   const endDay = events[events.length - 1].times.endDate;
 
   let trip = [];
-  let time = ``;
+  let time;
 
   for (let i = 0; i < events.length; i++) {
     trip.push(events[i].destination);
