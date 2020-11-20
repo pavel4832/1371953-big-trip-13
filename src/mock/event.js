@@ -1,6 +1,5 @@
-const YEAR = 2020;
-const MONTH = 11;
-const DAY_COUNT = 31;
+import dayjs from "dayjs";
+
 const HOUR_COUNT = 24;
 const MINUTES_COUNT = 60;
 const PRICE_COUNT = 1000;
@@ -56,27 +55,25 @@ const getShuffleArray = (target) => {
   return newArray;
 };
 
-const getTime = () => {
-  const day = getRandomInteger(1, DAY_COUNT);
-  const hour = getRandomInteger(0, HOUR_COUNT);
-  const minutes = getRandomInteger(0, MINUTES_COUNT);
+const getTime = (date) => {
   const durationHour = getRandomInteger(0, HOUR_COUNT);
   const durationMinutes = getRandomInteger(0, MINUTES_COUNT);
-  const date = new Date(YEAR, MONTH, day, hour, minutes);
-  const endDate = new Date(YEAR, MONTH, day, hour + durationHour, minutes + durationMinutes);
+  const endDate = date.add(durationHour, `hour`).add(durationMinutes, `minute`);
   let duration;
 
   if (durationHour === 0) {
-    duration = `${durationMinutes}M`;
+    duration = date.diff(endDate, `minute`).format(`MM`);
   } else {
-    duration = `${durationHour}H:${durationMinutes}M`;
+    duration = `${date.diff(endDate, `hour`).format(`HH`)}H:${date.diff(endDate, `minute`).format(`MM`)}M`;
   }
 
   return {
-    date,
+    startDate: date.format(),
+    endDate: endDate.format(),
+    date: date.format(`DD-MMMM`),
     duration,
-    startTime: `${date.getHours()}:${date.getMinutes()}`,
-    endTime: `${endDate.getHours()}:${endDate.getMinutes()}`
+    startTime: date.format(`HH:mm`),
+    endTime: endDate.format(`HH:mm`)
   };
 };
 
@@ -110,10 +107,12 @@ const getPhotosDestination = () => {
 };
 
 export const generateEvent = () => {
+  const date = dayjs();
+
   return {
     type: EVENT_TYPES[getRandomInteger(0, EVENT_TYPES.length - 1)],
     destination: CITIES[getRandomInteger(0, CITIES.length - 1)],
-    times: getTime(),
+    times: getTime(date),
     price: getPrice(),
     offers: getEventOffers(ALL_OFFERS),
     information: {
