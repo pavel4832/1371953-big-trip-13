@@ -1,7 +1,7 @@
-
+import {createOffersTemplate} from "./event-offers-list.js";
 
 export const createEventsItemTemplate = (event) => {
-  const {type, destination, times, price, isFavorite} = event;
+  const {type, destination, times, price, offers, isFavorite} = event;
   const date = times.startDate.format(`MMM D`);
   const startTime = times.startDate.format();
   const endTime = times.endDate.format();
@@ -9,6 +9,8 @@ export const createEventsItemTemplate = (event) => {
   const favoriteClassName = isFavorite
     ? `event__favorite-btn`
     : `event__favorite-btn event__favorite-btn--active`;
+
+  const offersTemplate = createOffersTemplate(offers);
 
   return `<li class="trip-events__item">
               <div class="event">
@@ -29,13 +31,7 @@ export const createEventsItemTemplate = (event) => {
                   &euro;&nbsp;<span class="event__price-value">${price}</span>
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
-                <ul class="event__selected-offers">
-                  <li class="event__offer">
-                    <span class="event__offer-title">Order Uber</span>
-                    &plus;&euro;&nbsp;
-                    <span class="event__offer-price">20</span>
-                  </li>
-                </ul>
+                ${offersTemplate}
                 <button class="${favoriteClassName}" type="button">
                   <span class="visually-hidden">Add to favorite</span>
                   <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">

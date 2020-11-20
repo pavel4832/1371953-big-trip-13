@@ -21,6 +21,16 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
+events.sort((a, b) => {
+  if (a.times.startDate.isBefore(b.times.startDate)) {
+    return -1;
+  } else if (a.times.startDate.isAfter(b.times.startDate)) {
+    return 1;
+  } else {
+    return 0;
+  }
+});
+
 render(siteTripMainElement, createTripInfoTemplate(), `afterbegin`);
 
 const siteTripInfoElement = siteTripMainElement.querySelector(`.trip-info`);
@@ -38,16 +48,6 @@ render(siteEventsElement, createEventsListTemplate(), `beforeend`);
 const listEventsElement = siteEventsElement.querySelector(`.trip-events__list`);
 
 render(listEventsElement, createEventsEditorTemplate(events[0]), `afterbegin`);
-
-events.sort((a, b) => {
-  if (a.times.startDate.isBefore(b.times.startDate)) {
-    return -1;
-  } else if (a.times.startDate.isAfter(b.times.startDate)) {
-    return 1;
-  } else {
-    return 0;
-  }
-});
 
 for (let i = 1; i < EVENT_COUNT; i++) {
   render(listEventsElement, createEventsItemTemplate(events[i]), `beforeend`);
