@@ -23,7 +23,7 @@ const render = (container, template, place) => {
 };
 
 events.sort((a, b) => {
-  return a.times.startDate.toDate().getTime() - b.times.startDate.toDate().getTime();
+  return a.times.startDate - b.times.startDate;
 });
 
 render(siteTripMainElement, createTripInfoTemplate(events), `afterbegin`);

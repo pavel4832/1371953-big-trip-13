@@ -67,7 +67,13 @@ const getTimes = (date) => {
   const differenceHour = endDate.diff(date, `hour`) - differenceDay * HOUR_COUNT;
   const differenceMinutes = endDate.diff(date, `minute`) - (differenceDay * HOUR_COUNT + differenceHour) * MINUTES_COUNT;
 
-  let duration = (durationDay === 0) ? `${differenceHour}H ${differenceMinutes}M` : `${differenceDay}D ${differenceHour}H ${differenceMinutes}M`;
+  let duration;
+
+  if (durationDay === 0) {
+    duration = (differenceHour === 0) ? `${differenceMinutes}M` : `${differenceHour}H ${differenceMinutes}M`;
+  } else {
+    duration = `${differenceDay}D ${differenceHour}H ${differenceMinutes}M`;
+  }
 
   return {
     startDate: date,
