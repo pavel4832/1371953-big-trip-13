@@ -31,11 +31,11 @@ events.sort((a, b) => {
   }
 });
 
-render(siteTripMainElement, createTripInfoTemplate(), `afterbegin`);
+render(siteTripMainElement, createTripInfoTemplate(events), `afterbegin`);
 
 const siteTripInfoElement = siteTripMainElement.querySelector(`.trip-info`);
 
-render(siteTripInfoElement, createTripCostTemplate(), `beforeend`);
+render(siteTripInfoElement, createTripCostTemplate(events), `beforeend`);
 
 render(siteMenuHeader, createSiteMenuTemplate(), `afterend`);
 
