@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 
+const DAY_COUNT = 30;
 const HOUR_COUNT = 24;
 const MINUTES_COUNT = 60;
 const PRICE_COUNT = 1000;
@@ -8,7 +9,7 @@ const SENTENCE_COUNT = 5;
 const PHOTO_COUNT = 5;
 const SAMPLE_TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 const EVENT_TYPES = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
-const CITIES = [`Amsterdam`, `Chanjmix`, `Geneva`];
+const CITIES = [`Amsterdam`, `Chamonix`, `Geneva`];
 const ALL_OFFERS = [
   {
     type: `event-offer-luggage`,
@@ -56,24 +57,29 @@ const getShuffleArray = (target) => {
 };
 
 const getTime = (date) => {
+  const durationDay = getRandomInteger(0, DAY_COUNT);
   const durationHour = getRandomInteger(0, HOUR_COUNT);
   const durationMinutes = getRandomInteger(0, MINUTES_COUNT);
-  const endDate = date.add(durationHour, `hour`).add(durationMinutes, `minute`);
+  const endDate = date.add(durationDay, `day`).add(durationHour, `hour`).add(durationMinutes, `minute`);
+  const differenceDay = endDate.diff(date, `day`);
+  const differenceHour = endDate.diff(date, `hour`) - differenceDay * HOUR_COUNT;
+  const differenceMinutes = endDate.diff(date, `minute`) - (differenceDay * HOUR_COUNT + differenceHour) * MINUTES_COUNT;
   let duration;
 
-  if (durationHour === 0) {
-    duration = date.diff(endDate, `minute`).format(`MM`);
+  if (durationDay === 0) {
+    if (durationHour === 0) {
+      duration = `${differenceMinutes}M`;
+    } else {
+      duration = `${differenceHour}H ${differenceMinutes}M`;
+    }
   } else {
-    duration = `${date.diff(endDate, `hour`).format(`HH`)}H:${date.diff(endDate, `minute`).format(`MM`)}M`;
+    duration = `${differenceDay}D ${differenceHour}H ${differenceMinutes}M`;
   }
 
   return {
-    startDate: date.format(),
-    endDate: endDate.format(),
-    date: date.format(`DD-MMMM`),
-    duration,
-    startTime: date.format(`HH:mm`),
-    endTime: endDate.format(`HH:mm`)
+    startDate: date,
+    endDate,
+    duration
   };
 };
 
@@ -107,7 +113,7 @@ const getPhotosDestination = () => {
 };
 
 export const generateEvent = () => {
-  const date = dayjs();
+  const date = dayjs().add(getRandomInteger(0, DAY_COUNT), `day`);
 
   return {
     type: EVENT_TYPES[getRandomInteger(0, EVENT_TYPES.length - 1)],
@@ -119,6 +125,6 @@ export const generateEvent = () => {
       description: getEventDescription(sentences),
       photos: getPhotosDestination()
     },
-    isFavorite: false
+    isFavorite: Boolean(getRandomInteger(0, 1))
   };
 };
