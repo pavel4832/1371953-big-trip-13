@@ -9,6 +9,7 @@ import {createEventsEditorTemplate} from "./view/events-edit.js";
 import {generateEvent} from "./mock/event.js";
 
 const EVENT_COUNT = 16;
+
 const siteHeaderElement = document.querySelector(`.page-header`);
 const siteMainElement = document.querySelector(`.page-main`);
 const siteTripMainElement = siteHeaderElement.querySelector(`.trip-main`);
@@ -22,13 +23,7 @@ const render = (container, template, place) => {
 };
 
 events.sort((a, b) => {
-  if (a.times.startDate.isBefore(b.times.startDate)) {
-    return -1;
-  } else if (a.times.startDate.isAfter(b.times.startDate)) {
-    return 1;
-  } else {
-    return 0;
-  }
+  return a.times.startDate.toDate().getTime() - b.times.startDate.toDate().getTime();
 });
 
 render(siteTripMainElement, createTripInfoTemplate(events), `afterbegin`);

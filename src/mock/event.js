@@ -37,6 +37,7 @@ const ALL_OFFERS = [
     price: 40
   }
 ];
+
 const sentences = SAMPLE_TEXT.split(`. `);
 
 const getRandomInteger = (a = 0, b = 1) => {
@@ -53,10 +54,11 @@ const getShuffleArray = (target) => {
     let j = Math.floor(Math.random() * (i + 1));
     [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
   }
+
   return newArray;
 };
 
-const getTime = (date) => {
+const getTimes = (date) => {
   const durationDay = getRandomInteger(0, DAY_COUNT);
   const durationHour = getRandomInteger(0, HOUR_COUNT);
   const durationMinutes = getRandomInteger(0, MINUTES_COUNT);
@@ -64,17 +66,8 @@ const getTime = (date) => {
   const differenceDay = endDate.diff(date, `day`);
   const differenceHour = endDate.diff(date, `hour`) - differenceDay * HOUR_COUNT;
   const differenceMinutes = endDate.diff(date, `minute`) - (differenceDay * HOUR_COUNT + differenceHour) * MINUTES_COUNT;
-  let duration;
 
-  if (durationDay === 0) {
-    if (durationHour === 0) {
-      duration = `${differenceMinutes}M`;
-    } else {
-      duration = `${differenceHour}H ${differenceMinutes}M`;
-    }
-  } else {
-    duration = `${differenceDay}D ${differenceHour}H ${differenceMinutes}M`;
-  }
+  let duration = (durationDay === 0) ? `${differenceHour}H ${differenceMinutes}M` : `${differenceDay}D ${differenceHour}H ${differenceMinutes}M`;
 
   return {
     startDate: date,
@@ -103,12 +96,13 @@ const getEventDescription = (target) => {
 };
 
 const getPhotosDestination = () => {
-  const length = getRandomInteger(0, PHOTO_COUNT);
+  const photosCount = getRandomInteger(0, PHOTO_COUNT);
   const photos = [];
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < photosCount; i++) {
     photos.push(`http://picsum.photos/248/152?r=${Math.random()}`);
   }
+
   return photos;
 };
 
@@ -118,7 +112,7 @@ export const generateEvent = () => {
   return {
     type: EVENT_TYPES[getRandomInteger(0, EVENT_TYPES.length - 1)],
     destination: CITIES[getRandomInteger(0, CITIES.length - 1)],
-    times: getTime(date),
+    times: getTimes(date),
     price: getPrice(),
     offers: getEventOffers(ALL_OFFERS),
     information: {

@@ -8,20 +8,22 @@ export const createOffers = (offers) => {
   for (let i = 0; i < offers.length; i++) {
     const {type} = offers[i];
 
-    if (type === `event-offer-luggage`) {
-      checkedLuggage = `checked`;
-    }
-    if (type === `event-offer-comfort`) {
-      checkedComfort = `checked`;
-    }
-    if (type === `event-offer-meal`) {
-      checkedMeal = `checked`;
-    }
-    if (type === `event-offer-seats`) {
-      checkedSeats = `checked`;
-    }
-    if (type === `event-offer-train`) {
-      checkedTrain = `checked`;
+    switch (type) {
+      case `event-offer-luggage`:
+        checkedLuggage = `checked`;
+        break;
+      case `event-offer-comfort`:
+        checkedComfort = `checked`;
+        break;
+      case `event-offer-meal`:
+        checkedMeal = `checked`;
+        break;
+      case `event-offer-seats`:
+        checkedSeats = `checked`;
+        break;
+      case `event-offer-train`:
+        checkedTrain = `checked`;
+        break;
     }
   }
 
