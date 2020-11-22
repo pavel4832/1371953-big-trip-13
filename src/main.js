@@ -9,6 +9,7 @@ import {createEventsEditorTemplate} from "./view/events-edit.js";
 import {generateEvent} from "./mock/event.js";
 
 const EVENT_COUNT = 16;
+const START_EVENT_IN_LIST = 1;
 
 const siteHeaderElement = document.querySelector(`.page-header`);
 const siteMainElement = document.querySelector(`.page-main`);
@@ -44,6 +45,6 @@ const listEventsElement = siteEventsElement.querySelector(`.trip-events__list`);
 
 render(listEventsElement, createEventsEditorTemplate(events[0]), `afterbegin`);
 
-for (let i = 1; i < EVENT_COUNT; i++) {
+for (let i = START_EVENT_IN_LIST; i < EVENT_COUNT; i++) {
   render(listEventsElement, createEventsItemTemplate(events[i]), `beforeend`);
 }
