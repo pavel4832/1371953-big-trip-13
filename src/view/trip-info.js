@@ -1,4 +1,6 @@
-export const createTripInfoTemplate = (events) => {
+import {createElement} from "../utils.js";
+
+const createTripInfoTemplate = (events) => {
   const startDay = events[0].times.startDate;
   const endDay = events[events.length - 1].times.endDate;
 
@@ -23,3 +25,26 @@ export const createTripInfoTemplate = (events) => {
             </div>
           </section>`;
 };
+
+export default class TripInfo {
+  constructor(events) {
+    this._events = events;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripInfoTemplate(this._events);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

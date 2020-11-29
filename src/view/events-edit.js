@@ -1,6 +1,7 @@
 import {createOffers} from "./event-offers-available.js";
+import {createElement} from "../utils.js";
 
-export const createEventsEditorTemplate = (event) => {
+const createEventsEditorTemplate = (event) => {
   const {type, destination, times, price, offers, information} = event;
   const startTime = times.startDate.format(`DD/MM/YY HH:mm`);
   const endTime = times.endDate.format(`DD/MM/YY HH:mm`);
@@ -122,3 +123,26 @@ export const createEventsEditorTemplate = (event) => {
               </form>
             </li>`;
 };
+
+export default class EventEdit {
+  constructor(events) {
+    this._events = events;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventsEditorTemplate(this._events);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
