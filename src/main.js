@@ -1,13 +1,13 @@
 import {createTripInfoTemplate} from "./view/trip-info.js";
 import {createTripCostTemplate} from "./view/trip-cost.js";
-import {createSiteMenuTemplate} from "./view/site-menu.js";
+import SiteMenuView from "./view/site-menu.js";
 import {createSiteFilterTemplate} from "./view/site-filter.js";
 import {createEventsSortTemplate} from "./view/events-sort.js";
 import {createEventsListTemplate} from "./view/events-list.js";
 import {createEventsItemTemplate} from "./view/events-item.js";
 import {createEventsEditorTemplate} from "./view/events-edit.js";
 import {generateEvent} from "./mock/event.js";
-import {renderTemplate} from "./utils.js";
+import {renderTemplate, renderElement, RenderPosition} from "./utils.js";
 
 const EVENT_COUNT = 16;
 
@@ -29,7 +29,7 @@ const siteTripInfoElement = siteTripMainElement.querySelector(`.trip-info`);
 
 renderTemplate(siteTripInfoElement, createTripCostTemplate(events), `beforeend`);
 
-renderTemplate(siteMenuHeader, createSiteMenuTemplate(), `afterend`);
+renderElement(siteMenuHeader, new SiteMenuView().getElement(), RenderPosition.AFTER);
 
 renderTemplate(siteFilterHeader, createSiteFilterTemplate(), `afterend`);
 
