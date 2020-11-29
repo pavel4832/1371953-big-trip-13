@@ -7,9 +7,9 @@ import {createEventsListTemplate} from "./view/events-list.js";
 import {createEventsItemTemplate} from "./view/events-item.js";
 import {createEventsEditorTemplate} from "./view/events-edit.js";
 import {generateEvent} from "./mock/event.js";
+import {renderTemplate} from "./utils.js";
 
 const EVENT_COUNT = 16;
-const START_EVENT_IN_LIST = 1;
 
 const siteHeaderElement = document.querySelector(`.page-header`);
 const siteMainElement = document.querySelector(`.page-main`);
@@ -19,32 +19,26 @@ const siteEventsElement = siteMainElement.querySelector(`.trip-events`);
 const siteEventsHeader = siteEventsElement.querySelector(`h2`);
 const events = new Array(EVENT_COUNT).fill().map(generateEvent);
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
 events.sort((a, b) => {
   return a.times.startDate - b.times.startDate;
 });
 
-render(siteTripMainElement, createTripInfoTemplate(events), `afterbegin`);
+renderTemplate(siteTripMainElement, createTripInfoTemplate(events), `afterbegin`);
 
 const siteTripInfoElement = siteTripMainElement.querySelector(`.trip-info`);
 
-render(siteTripInfoElement, createTripCostTemplate(events), `beforeend`);
+renderTemplate(siteTripInfoElement, createTripCostTemplate(events), `beforeend`);
 
-render(siteMenuHeader, createSiteMenuTemplate(), `afterend`);
+renderTemplate(siteMenuHeader, createSiteMenuTemplate(), `afterend`);
 
-render(siteFilterHeader, createSiteFilterTemplate(), `afterend`);
+renderTemplate(siteFilterHeader, createSiteFilterTemplate(), `afterend`);
 
-render(siteEventsHeader, createEventsSortTemplate(), `afterend`);
+renderTemplate(siteEventsHeader, createEventsSortTemplate(), `afterend`);
 
-render(siteEventsElement, createEventsListTemplate(), `beforeend`);
+renderTemplate(siteEventsElement, createEventsListTemplate(), `beforeend`);
 
 const listEventsElement = siteEventsElement.querySelector(`.trip-events__list`);
 
-render(listEventsElement, createEventsEditorTemplate(events[0]), `afterbegin`);
-
-for (let i = START_EVENT_IN_LIST; i < EVENT_COUNT; i++) {
-  render(listEventsElement, createEventsItemTemplate(events[i]), `beforeend`);
+for (let i = 0; i < EVENT_COUNT; i++) {
+  renderTemplate(listEventsElement, createEventsItemTemplate(events[i]), `beforeend`);
 }
