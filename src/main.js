@@ -1,7 +1,7 @@
 import {createTripInfoTemplate} from "./view/trip-info.js";
 import {createTripCostTemplate} from "./view/trip-cost.js";
 import SiteMenuView from "./view/site-menu.js";
-import {createSiteFilterTemplate} from "./view/site-filter.js";
+import SiteFilterView from "./view/site-filter.js";
 import {createEventsSortTemplate} from "./view/events-sort.js";
 import {createEventsListTemplate} from "./view/events-list.js";
 import {createEventsItemTemplate} from "./view/events-item.js";
@@ -31,7 +31,7 @@ renderTemplate(siteTripInfoElement, createTripCostTemplate(events), `beforeend`)
 
 renderElement(siteMenuHeader, new SiteMenuView().getElement(), RenderPosition.AFTER);
 
-renderTemplate(siteFilterHeader, createSiteFilterTemplate(), `afterend`);
+renderElement(siteFilterHeader, new SiteFilterView().getElement(), RenderPosition.AFTER);
 
 renderTemplate(siteEventsHeader, createEventsSortTemplate(), `afterend`);
 
