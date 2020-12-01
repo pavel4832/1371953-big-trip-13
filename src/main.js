@@ -2,11 +2,11 @@ import TripInfoView from "./view/trip-info.js";
 import TripCostView from "./view/trip-cost.js";
 import SiteMenuView from "./view/site-menu.js";
 import SiteFilterView from "./view/site-filter.js";
-import EventSortView from "./view/events-sort.js";
-import EventListView from "./view/events-list.js";
+import EventsSortView from "./view/events-sort.js";
+import EventsListView from "./view/events-list.js";
 import EventView from "./view/events-item.js";
 import EventEditView from "./view/events-edit.js";
-import NoEventView from "./view/no-event.js";
+import NoEventsView from "./view/no-events.js";
 import {generateEvent} from "./mock/event.js";
 import {render, RenderPosition} from "./utils.js";
 
@@ -21,19 +21,17 @@ const siteEventsHeader = siteEventsElement.querySelector(`h2`);
 const events = new Array(EVENT_COUNT).fill().map(generateEvent).sort((a, b) => {
   return a.times.startDate - b.times.startDate;
 });
-const tripInfoComponent = new TripInfoView(events);
-const eventListComponent = new EventListView();
 
-const renderEvent = (eventListElement, event) => {
+const renderEvent = (eventsListElement, event) => {
   const eventComponent = new EventView(event);
   const eventEditComponent = new EventEditView(event);
 
   const replaceCardToForm = () => {
-    eventListElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
+    eventsListElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
   };
 
   const replaceFormToCard = () => {
-    eventListElement.replaceChild(eventComponent.getElement(), eventEditComponent.getElement());
+    eventsListElement.replaceChild(eventComponent.getElement(), eventEditComponent.getElement());
   };
 
   const onEscKeyDown = (evt) => {
@@ -59,25 +57,32 @@ const renderEvent = (eventListElement, event) => {
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
+  render(eventsListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
+};
+
+const renderEventsList = (eventsContainer, tripEvents) => {
+  const tripInfoComponent = new TripInfoView(tripEvents);
+  const eventsListComponent = new EventsListView();
+
+  if (tripEvents.length === 0) {
+    render(siteEventsElement, new NoEventsView().getElement(), RenderPosition.BEFOREEND);
+  } else {
+    render(siteTripMainElement, tripInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
+
+    render(tripInfoComponent.getElement(), new TripCostView(events).getElement(), RenderPosition.BEFOREEND);
+
+    render(siteEventsHeader, new EventsSortView().getElement(), RenderPosition.AFTER);
+
+    render(siteEventsElement, eventsListComponent.getElement(), RenderPosition.BEFOREEND);
+
+    for (let i = 0; i < EVENT_COUNT; i++) {
+      renderEvent(eventsListComponent.getElement(), tripEvents[i]);
+    }
+  }
 };
 
 render(siteMenuHeader, new SiteMenuView().getElement(), RenderPosition.AFTER);
 
 render(siteFilterHeader, new SiteFilterView().getElement(), RenderPosition.AFTER);
 
-if (events.length === 0) {
-  render(siteEventsElement, new NoEventView().getElement(), RenderPosition.BEFOREEND);
-} else {
-  render(siteTripMainElement, tripInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
-
-  render(tripInfoComponent.getElement(), new TripCostView(events).getElement(), RenderPosition.BEFOREEND);
-
-  render(siteEventsHeader, new EventSortView().getElement(), RenderPosition.AFTER);
-
-  render(siteEventsElement, eventListComponent.getElement(), RenderPosition.BEFOREEND);
-
-  for (let i = 0; i < EVENT_COUNT; i++) {
-    renderEvent(eventListComponent.getElement(), events[i]);
-  }
-}
+renderEventsList(siteEventsElement, events);
