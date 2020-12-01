@@ -6,6 +6,7 @@ import EventSortView from "./view/events-sort.js";
 import EventListView from "./view/events-list.js";
 import EventView from "./view/events-item.js";
 import EventEditView from "./view/events-edit.js";
+import NoEventView from "./view/no-event.js";
 import {generateEvent} from "./mock/event.js";
 import {render, RenderPosition} from "./utils.js";
 
@@ -61,18 +62,22 @@ const renderEvent = (eventListElement, event) => {
   render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-render(siteTripMainElement, tripInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
-
-render(tripInfoComponent.getElement(), new TripCostView(events).getElement(), RenderPosition.BEFOREEND);
-
 render(siteMenuHeader, new SiteMenuView().getElement(), RenderPosition.AFTER);
 
 render(siteFilterHeader, new SiteFilterView().getElement(), RenderPosition.AFTER);
 
-render(siteEventsHeader, new EventSortView().getElement(), RenderPosition.AFTER);
+if (events.length === 0) {
+  render(siteEventsElement, new NoEventView().getElement(), RenderPosition.BEFOREEND);
+} else {
+  render(siteTripMainElement, tripInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
 
-render(siteEventsElement, eventListComponent.getElement(), RenderPosition.BEFOREEND);
+  render(tripInfoComponent.getElement(), new TripCostView(events).getElement(), RenderPosition.BEFOREEND);
 
-for (let i = 0; i < EVENT_COUNT; i++) {
-  renderEvent(eventListComponent.getElement(), events[i]);
+  render(siteEventsHeader, new EventSortView().getElement(), RenderPosition.AFTER);
+
+  render(siteEventsElement, eventListComponent.getElement(), RenderPosition.BEFOREEND);
+
+  for (let i = 0; i < EVENT_COUNT; i++) {
+    renderEvent(eventListComponent.getElement(), events[i]);
+  }
 }
