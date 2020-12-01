@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import {getRandomInteger} from "../utils.js";
 
 const DAY_COUNT = 30;
 const HOUR_COUNT = 24;
@@ -39,13 +40,6 @@ const ALL_OFFERS = [
 ];
 
 const sentences = SAMPLE_TEXT.split(`. `);
-
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
 
 const getShuffleArray = (target) => {
   const newArray = target.slice();

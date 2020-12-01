@@ -1,6 +1,7 @@
 import {createOffersTemplate} from "./event-offers-list.js";
+import {createElement} from "../utils.js";
 
-export const createEventsItemTemplate = (event) => {
+const createEventsItemTemplate = (event) => {
   const {type, destination, times, price, offers, isFavorite} = event;
   const date = times.startDate.format(`MMM D`);
   const startTime = times.startDate.format();
@@ -44,3 +45,26 @@ export const createEventsItemTemplate = (event) => {
               </div>
             </li>`;
 };
+
+export default class Event {
+  constructor(events) {
+    this._events = events;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventsItemTemplate(this._events);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
