@@ -1,5 +1,5 @@
 import {createOffersTemplate} from "./event-offers-list.js";
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract-view.js";
 
 const createEventsItemTemplate = (event) => {
   const {type, destination, times, price, offers, isFavorite} = event;
@@ -46,25 +46,24 @@ const createEventsItemTemplate = (event) => {
             </li>`;
 };
 
-export default class Event {
+export default class Event extends AbstractView {
   constructor(events) {
+    super();
     this._events = events;
-    this._element = null;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createEventsItemTemplate(this._events);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setRollupClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._clickHandler);
   }
 }
