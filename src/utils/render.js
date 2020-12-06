@@ -14,23 +14,26 @@ export const createElement = (template) => {
 };
 
 export const render = (container, child, place) => {
+  let containerElement = container;
+  let childElement = child;
+
   if (container instanceof Abstract) {
-    container = container.getElement();
+    containerElement = container.getElement();
   }
 
   if (child instanceof Abstract) {
-    child = child.getElement();
+    childElement = child.getElement();
   }
 
   switch (place) {
     case RenderPosition.AFTERBEGIN:
-      container.prepend(child);
+      containerElement.prepend(childElement);
       break;
     case RenderPosition.BEFOREEND:
-      container.append(child);
+      containerElement.append(childElement);
       break;
     case RenderPosition.AFTER:
-      container.after(child);
+      containerElement.after(childElement);
       break;
   }
 };
