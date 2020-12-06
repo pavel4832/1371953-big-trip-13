@@ -39,21 +39,24 @@ export const render = (container, child, place) => {
 };
 
 export const replace = (newChild, oldChild) => {
+  let oldElement = oldChild;
+  let newElement = newChild;
+
   if (oldChild instanceof Abstract) {
-    oldChild = oldChild.getElement();
+    oldElement = oldChild.getElement();
   }
 
   if (newChild instanceof Abstract) {
-    newChild = newChild.getElement();
+    newElement = newChild.getElement();
   }
 
-  const parent = oldChild.parentElement;
+  const parent = oldElement.parentElement;
 
-  if (parent === null || newChild === null) {
+  if (parent === null || newElement === null) {
     throw new Error(`Can't replace nonexistent elements`);
   }
 
-  parent.replaceChild(newChild, oldChild);
+  parent.replaceChild(newElement, oldElement);
 };
 
 export const remove = (component) => {
