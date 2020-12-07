@@ -1,4 +1,6 @@
-export const createEventsNewTemplate = () => {
+import AbstractView from "./abstract-view.js";
+
+const createEventsNewTemplate = () => {
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -167,3 +169,9 @@ export const createEventsNewTemplate = () => {
               </form>
             </li>`;
 };
+
+export default class EventNew extends AbstractView {
+  getTemplate() {
+    return createEventsNewTemplate();
+  }
+}
