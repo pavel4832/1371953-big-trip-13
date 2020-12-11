@@ -1,13 +1,9 @@
-import TripInfoView from "../view/trip-info.js";
-import TripCostView from "../view/trip-cost.js";
 import EventsSortView from "../view/events-sort.js";
 import EventsListView from "../view/events-list.js";
-import EventView from "../view/events-item.js";
-import EventEditView from "../view/events-edit.js";
 import NoEventsView from "../view/no-events.js";
-import {render, replace, RenderPosition} from "../utils/render.js";
-
-const siteTripMainElement = document.querySelector(`.trip-main`);
+import InfoPresenter from "./info.js";
+import EventPresenter from "./event.js";
+import {render, RenderPosition} from "../utils/render.js";
 
 export default class Trip {
   constructor(tripContainer) {
@@ -27,53 +23,17 @@ export default class Trip {
   }
 
   _renderTripInfo() {
-    const tripInfoComponent = new TripInfoView(this._tripEvents);
-    const tripCostComponent = new TripCostView(this._tripEvents);
-
-    render(siteTripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
-
-    render(tripInfoComponent, tripCostComponent, RenderPosition.BEFOREEND);
+    const infoPresenter = new InfoPresenter(this._tripEvents);
+    infoPresenter.init();
   }
 
   _renderSort() {
-    render(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    render(this._tripContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderEvent(event) {
-    const eventComponent = new EventView(event);
-    const eventEditComponent = new EventEditView(event);
-
-    const replaceCardToForm = () => {
-      replace(eventEditComponent, eventComponent);
-    };
-
-    const replaceFormToCard = () => {
-      replace(eventComponent, eventEditComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    eventComponent.setRollupClickHandler(() => {
-      replaceCardToForm();
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-    eventEditComponent.setRollupClickHandler(() => {
-      replaceFormToCard();
-    });
-
-    eventEditComponent.setFormSubmitHandler(() => {
-      replaceFormToCard();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    render(this._tripComponent, eventComponent, RenderPosition.BEFOREEND);
+    const eventPresenter = new EventPresenter(this._tripComponent);
+    eventPresenter.init(event);
   }
 
   _renderEventsList() {
