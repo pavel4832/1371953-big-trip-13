@@ -3,13 +3,15 @@ import EventEditView from "../view/events-edit.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
 export default class Event {
-  constructor(eventListContainer) {
+  constructor(eventListContainer, changeData) {
     this._eventListContainer = eventListContainer;
+    this._changeData = changeData;
 
     this._eventComponent = null;
     this._eventEditComponent = null;
 
     this._handleRollupClick = this._handleRollupClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
@@ -24,6 +26,7 @@ export default class Event {
     this._eventEditComponent = new EventEditView(this._event);
 
     this._eventComponent.setRollupClickHandler(this._handleRollupClick);
+    this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._eventEditComponent.setRollupClickHandler(this._handleFormSubmit);
     this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
 
@@ -58,6 +61,18 @@ export default class Event {
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 
+  _handleFavoriteClick() {
+    this._changeData(
+        Object.assign(
+            {},
+            this._event,
+            {
+              isFavorite: !this._event.isFavorite
+            }
+        )
+    );
+  }
+
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
@@ -70,6 +85,7 @@ export default class Event {
   }
 
   _handleFormSubmit() {
+    this._changeData(this._event);
     this._replaceFormToCard();
   }
 }
