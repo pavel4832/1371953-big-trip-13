@@ -17,7 +17,11 @@ export default class Trip {
   }
 
   init(tripEvents) {
-    this._tripEvants = tripEvents.slice();
+    this._tripEvents = tripEvents.slice();
+
+    render(this._tripContainer, this._tripComponent, RenderPosition.BEFOREEND);
+
+    this._renderTrip();
   }
 
   _renderTripInfo() {
@@ -42,7 +46,15 @@ export default class Trip {
   }
 
   _renderTrip() {
-    // Метод для инициализации (начала работы) модуля,
-    // бОльшая часть текущей функции renderBoard в main.js
+    if (this._tripEvents.length === 0) {
+      this._renderNoEvents();
+      return;
+    }
+
+    this._renderTripInfo();
+
+    this._renderSort();
+
+    this._renderEventsList();
   }
 }
