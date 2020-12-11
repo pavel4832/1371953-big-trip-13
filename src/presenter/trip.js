@@ -14,7 +14,7 @@ export default class Trip {
     this._tripContainer = tripContainer;
 
     this._tripInfoComponent = new TripInfoView(this._tripEvents);
-    this._tripCostComponent = new TripCostView(this._tripEvents)
+    this._tripCostComponent = new TripCostView(this._tripEvents);
     this._tripComponent = new EventsListView();
     this._sortComponent = new EventsSortView();
     this._noEventsComponent = new NoEventsView();
@@ -38,9 +38,41 @@ export default class Trip {
     render(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderEvent() {
-    // Метод, куда уйдёт логика созданию и рендерингу компонетов задачи,
-    // текущая функция renderTask в main.js
+  _renderEvent(event) {
+    const eventComponent = new EventView(event);
+    const eventEditComponent = new EventEditView(event);
+
+    const replaceCardToForm = () => {
+      replace(eventEditComponent, eventComponent);
+    };
+
+    const replaceFormToCard = () => {
+      replace(eventComponent, eventEditComponent);
+    };
+
+    const onEscKeyDown = (evt) => {
+      if (evt.key === `Escape` || evt.key === `Esc`) {
+        evt.preventDefault();
+        replaceFormToCard();
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
+    };
+
+    eventComponent.setRollupClickHandler(() => {
+      replaceCardToForm();
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+    eventEditComponent.setRollupClickHandler(() => {
+      replaceFormToCard();
+    });
+
+    eventEditComponent.setFormSubmitHandler(() => {
+      replaceFormToCard();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
+
+    render(this._tripComponent, eventComponent, RenderPosition.BEFOREEND);
   }
 
   _renderEventsList() {
