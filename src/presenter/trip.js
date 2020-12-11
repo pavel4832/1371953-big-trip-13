@@ -7,10 +7,14 @@ import EventEditView from "./view/events-edit.js";
 import NoEventsView from "./view/no-events.js";
 import {render, replace, RenderPosition} from "./utils/render.js";
 
+const siteTripMainElement = document.querySelector(`.trip-main`);
+
 export default class Trip {
   constructor(tripContainer) {
     this._tripContainer = tripContainer;
 
+    this._tripInfoComponent = new TripInfoView(this._tripEvents);
+    this._tripCostComponent = new TripCostView(this._tripEvents)
     this._tripComponent = new EventsListView();
     this._sortComponent = new EventsSortView();
     this._noEventsComponent = new NoEventsView();
@@ -25,11 +29,13 @@ export default class Trip {
   }
 
   _renderTripInfo() {
-    // метод отрисовки шапки маршрута с полной стоимостью
+    render(siteTripMainElement, this._tripInfoComponent, RenderPosition.AFTERBEGIN);
+
+    render(this._tripInfoComponent, this._tripCostComponent, RenderPosition.BEFOREEND);
   }
 
   _renderSort() {
-    // Метод для рендеринга сортировки
+    render(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
   _renderEvent() {
@@ -38,11 +44,11 @@ export default class Trip {
   }
 
   _renderEventsList() {
-    // Метод для рендеринга N-задач за раз
+    this._tripEvents.forEach((tripEvent) => this._renderEvent(tripEvent));
   }
 
   _renderNoEvents() {
-    // Метод для рендеринга заглушки
+    render(this._tripContainer, this._noEventsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderTrip() {
