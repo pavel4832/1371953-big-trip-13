@@ -1,11 +1,11 @@
-import TripInfoView from "./view/trip-info.js";
-import TripCostView from "./view/trip-cost.js";
-import EventsSortView from "./view/events-sort.js";
-import EventsListView from "./view/events-list.js";
-import EventView from "./view/events-item.js";
-import EventEditView from "./view/events-edit.js";
-import NoEventsView from "./view/no-events.js";
-import {render, replace, RenderPosition} from "./utils/render.js";
+import TripInfoView from "../view/trip-info.js";
+import TripCostView from "../view/trip-cost.js";
+import EventsSortView from "../view/events-sort.js";
+import EventsListView from "../view/events-list.js";
+import EventView from "../view/events-item.js";
+import EventEditView from "../view/events-edit.js";
+import NoEventsView from "../view/no-events.js";
+import {render, replace, RenderPosition} from "../utils/render.js";
 
 const siteTripMainElement = document.querySelector(`.trip-main`);
 
@@ -13,8 +13,6 @@ export default class Trip {
   constructor(tripContainer) {
     this._tripContainer = tripContainer;
 
-    this._tripInfoComponent = new TripInfoView(this._tripEvents);
-    this._tripCostComponent = new TripCostView(this._tripEvents);
     this._tripComponent = new EventsListView();
     this._sortComponent = new EventsSortView();
     this._noEventsComponent = new NoEventsView();
@@ -29,9 +27,12 @@ export default class Trip {
   }
 
   _renderTripInfo() {
-    render(siteTripMainElement, this._tripInfoComponent, RenderPosition.AFTERBEGIN);
+    const tripInfoComponent = new TripInfoView(this._tripEvents);
+    const tripCostComponent = new TripCostView(this._tripEvents);
 
-    render(this._tripInfoComponent, this._tripCostComponent, RenderPosition.BEFOREEND);
+    render(siteTripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
+
+    render(tripInfoComponent, tripCostComponent, RenderPosition.BEFOREEND);
   }
 
   _renderSort() {
