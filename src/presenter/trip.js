@@ -9,6 +9,7 @@ import {render, RenderPosition} from "../utils/render.js";
 export default class Trip {
   constructor(tripContainer) {
     this._tripContainer = tripContainer;
+    this._infoPresenter = null;
     this._eventPresenter = {};
 
     this._tripComponent = new EventsListView();
@@ -16,6 +17,7 @@ export default class Trip {
     this._noEventsComponent = new NoEventsView();
 
     this._handleEventChange = this._handleEventChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(tripEvents) {
@@ -26,14 +28,22 @@ export default class Trip {
     this._renderTrip();
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._eventPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
   _handleEventChange(updatedEvent) {
     this._tripEvents = updateItem(this._tripEvents, updatedEvent);
     this._eventPresenter[updatedEvent.id].init(updatedEvent);
+    this._infoPresenter.destroy();
+    this._infoPresenter.init(this._tripEvents);
   }
 
   _renderTripInfo() {
-    const infoPresenter = new InfoPresenter(this._tripEvents);
-    infoPresenter.init();
+    this._infoPresenter = new InfoPresenter();
+    this._infoPresenter.init(this._tripEvents);
   }
 
   _renderSort() {
@@ -41,7 +51,7 @@ export default class Trip {
   }
 
   _renderEvent(event) {
-    const eventPresenter = new EventPresenter(this._tripComponent, this._handleEventChange);
+    const eventPresenter = new EventPresenter(this._tripComponent, this._handleEventChange, this._handleModeChange);
     eventPresenter.init(event);
     this._eventPresenter[event.id] = eventPresenter;
   }
