@@ -41,6 +41,8 @@ const ALL_OFFERS = [
 
 const sentences = SAMPLE_TEXT.split(`. `);
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, RADIX);
+
 const getShuffleArray = (target) => {
   const newArray = target.slice();
 
@@ -110,6 +112,7 @@ export const generateEvent = () => {
   const date = dayjs().add(getRandomInteger(0, DAY_COUNT), `day`);
 
   return {
+    id: generateId(),
     type: EVENT_TYPES[getRandomInteger(0, EVENT_TYPES.length - 1)],
     destination: CITIES[getRandomInteger(0, CITIES.length - 1)],
     times: getTimes(date),
