@@ -6,9 +6,9 @@ export const sortEventTime = (eventA, eventB) => {
   const durationA = eventA.times.endDate - eventA.times.startDate;
   const durationB = eventB.times.endDate - eventB.times.startDate;
 
-  return durationA - durationB;
+  return durationB - durationA;
 };
 
 export const sortEventPrice = (eventA, eventB) => {
-  return eventA.price - eventB.price;
+  return eventB.price - eventA.price;
 };
