@@ -3,7 +3,10 @@ export const sortEventDay = (eventA, eventB) => {
 };
 
 export const sortEventTime = (eventA, eventB) => {
-  return eventA.times.duration - eventB.times.duration;
+  const durationA = eventA.times.endDate - eventA.times.startDate;
+  const durationB = eventB.times.endDate - eventB.times.startDate;
+
+  return durationA - durationB;
 };
 
 export const sortEventPrice = (eventA, eventB) => {
