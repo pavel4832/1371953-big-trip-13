@@ -5,12 +5,15 @@ import InfoPresenter from "./info.js";
 import EventPresenter from "./event.js";
 import {updateItem} from "../utils/common.js";
 import {render, RenderPosition} from "../utils/render.js";
+import {sortEventTime, sortEventPrice} from "../utils/event.js";
+import {SortType} from "../const.js";
 
 export default class Trip {
   constructor(tripContainer) {
     this._tripContainer = tripContainer;
     this._infoPresenter = null;
     this._eventPresenter = {};
+    this._currentSortType = SortType.DEFAULT;
 
     this._tripComponent = new EventsListView();
     this._sortComponent = new EventsSortView();
@@ -23,10 +26,26 @@ export default class Trip {
 
   init(tripEvents) {
     this._tripEvents = tripEvents.slice();
+    this._sourcedTripEvents = tripEvents.slice();
 
     render(this._tripContainer, this._tripComponent, RenderPosition.BEFOREEND);
 
     this._renderTrip();
+  }
+
+  _sortTasks(sortType) {
+    switch (sortType) {
+      case SortType.TIME:
+        this._tripEvents.sort(sortEventTime);
+        break;
+      case SortType.PRICE:
+        this._tripEvents.sort(sortEventPrice);
+        break;
+      default:
+        this._tripEvents = this._sourcedTripEvents.slice();
+    }
+
+    this._currentSortType = sortType;
   }
 
   _handleModeChange() {
@@ -43,9 +62,13 @@ export default class Trip {
   }
 
   _handleSortTypeChange(sortType) {
-    // - Сортируем задачи
-    // - Очищаем список
-    // - Рендерим список заново
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._sortTasks(sortType);
+    this._clearEventsList();
+    this._renderEventsList();
   }
 
   _renderTripInfo() {

@@ -41,7 +41,7 @@ export default class EventSort extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
-    if (evt.target.tagName !== `input`) {
+    if (evt.target.tagName !== `INPUT`) {
       return;
     }
 
