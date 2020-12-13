@@ -12,7 +12,7 @@ export default class Trip {
   constructor(tripContainer) {
     this._tripContainer = tripContainer;
     this._infoPresenter = null;
-    this._eventPresenter = {};
+    this._eventPresenterList = {};
     this._currentSortType = SortType.DEFAULT;
 
     this._tripComponent = new EventsListView();
@@ -50,13 +50,13 @@ export default class Trip {
 
   _handleModeChange() {
     Object
-      .values(this._eventPresenter)
+      .values(this._eventPresenterList)
       .forEach((presenter) => presenter.resetView());
   }
 
   _handleEventChange(updatedEvent) {
     this._tripEvents = updateItem(this._tripEvents, updatedEvent);
-    this._eventPresenter[updatedEvent.id].init(updatedEvent);
+    this._eventPresenterList[updatedEvent.id].init(updatedEvent);
     this._infoPresenter.destroy();
     this._infoPresenter.init(this._tripEvents);
   }
@@ -84,7 +84,7 @@ export default class Trip {
   _renderEvent(event) {
     const eventPresenter = new EventPresenter(this._tripComponent, this._handleEventChange, this._handleModeChange);
     eventPresenter.init(event);
-    this._eventPresenter[event.id] = eventPresenter;
+    this._eventPresenterList[event.id] = eventPresenter;
   }
 
   _renderEventsList() {
@@ -97,9 +97,9 @@ export default class Trip {
 
   _clearEventsList() {
     Object
-      .values(this._eventPresenter)
+      .values(this._eventPresenterList)
       .forEach((presenter) => presenter.destroy());
-    this._eventPresenter = {};
+    this._eventPresenterList = {};
   }
 
   _renderTrip() {
