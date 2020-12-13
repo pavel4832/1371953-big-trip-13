@@ -64,7 +64,7 @@ export default class Trip {
     render(this._tripContainer, this._noEventsComponent, RenderPosition.BEFOREEND);
   }
 
-  _clearEventList() {
+  _clearEventsList() {
     Object
       .values(this._eventPresenter)
       .forEach((presenter) => presenter.destroy());
