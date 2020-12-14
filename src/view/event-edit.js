@@ -1,6 +1,6 @@
 import {createOffers} from "./event-offers-available.js";
 import SmartView from "./smart.js";
-import {getNewInformation} from "../mock/event.js";
+import {getEventOffers, getNewInformation, ALL_OFFERS} from "../mock/event.js";
 
 const createEventTypeIconTemplate = (type) => {
   return `<label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -210,7 +210,8 @@ export default class EventEdit extends SmartView {
   _eventTypeToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      type: evt.target.value
+      type: evt.target.value,
+      offers: getEventOffers(ALL_OFFERS)
     });
   }
 
