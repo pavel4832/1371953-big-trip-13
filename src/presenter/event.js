@@ -1,5 +1,5 @@
-import EventView from "../view/events-item.js";
-import EventEditView from "../view/events-edit.js";
+import EventView from "../view/event.js";
+import EventEditView from "../view/event-edit.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
 const Mode = {
