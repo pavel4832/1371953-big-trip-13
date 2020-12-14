@@ -1,4 +1,5 @@
-import AbstractView from "./abstract-view.js";
+import SmartView from "./smart.js";
+import {getNewInformation} from "../mock/event";
 
 const createEventsNewTemplate = () => {
   return `<li class="trip-events__item">
@@ -170,8 +171,80 @@ const createEventsNewTemplate = () => {
             </li>`;
 };
 
-export default class EventNew extends AbstractView {
+export default class EventNew extends SmartView {
+  constructor() {
+    super();
+    this._data = {};
+
+    this._clickHandler = this._clickHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
+    this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
+
+    this._setInnerHandlers();
+  }
+
+  reset(event) {
+    this.updateData(
+        EventNew.parseEventToData(event)
+    );
+  }
+
   getTemplate() {
     return createEventsNewTemplate();
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setRollupClickHandler(this._callback.click);
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelector(`.event__type-group`)
+      .addEventListener(`change`, this._eventTypeToggleHandler);
+    this.getElement()
+      .querySelector(`.event__input--destination`)
+      .addEventListener(`change`, this._destinationToggleHandler);
+  }
+
+  _eventTypeToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      type: evt.target.value
+    });
+  }
+
+  _destinationToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      destination: evt.target.value,
+      information: getNewInformation()
+    });
+  }
+
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit(EventNew.parseDataToEvent(this._data));
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  setRollupClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._clickHandler);
+  }
+
+  static parseDataToEvent(data) {
+    return Object.assign({}, data);
   }
 }
