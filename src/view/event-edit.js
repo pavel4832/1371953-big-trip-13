@@ -1,5 +1,5 @@
 import {createOffers} from "./event-offers-available.js";
-import AbstractView from "./abstract-view.js";
+import SmartView from "./smart.js";
 import {getNewInformation} from "../mock/event.js";
 
 const createEventTypeIconTemplate = (type) => {
@@ -169,7 +169,7 @@ const createEventEditTemplate = (data) => {
             </li>`;
 };
 
-export default class EventEdit extends AbstractView {
+export default class EventEdit extends SmartView {
   constructor(event) {
     super();
     this._data = EventEdit.parseEventToData(event);
@@ -184,32 +184,6 @@ export default class EventEdit extends AbstractView {
 
   getTemplate() {
     return createEventEditTemplate(this._data);
-  }
-
-  updateData(update) {
-    if (!update) {
-      return;
-    }
-
-    this._data = Object.assign(
-        {},
-        this._data,
-        update
-    );
-
-    this.updateElement();
-  }
-
-  updateElement() {
-    let prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-
-    parent.replaceChild(newElement, prevElement);
-
-    this.restoreHandlers();
   }
 
   restoreHandlers() {
