@@ -1,6 +1,85 @@
 import {createOffers} from "./event-offers-available.js";
 import AbstractView from "./abstract-view.js";
 
+const createEventTypeIconTemplate = (type) => {
+  return `<label class="event__type  event__type-btn" for="event-type-toggle-1">
+            <span class="visually-hidden">Choose event type</span>
+            <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+          </label>
+          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+
+          <div class="event__type-list">
+            <fieldset class="event__type-group">
+              <legend class="visually-hidden">Event type</legend>
+
+              <div class="event__type-item">
+                <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
+                <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
+              </div>
+
+              <div class="event__type-item">
+                <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
+                <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
+              </div>
+
+              <div class="event__type-item">
+                <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
+                <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
+              </div>
+
+              <div class="event__type-item">
+                <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
+                <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
+              </div>
+
+              <div class="event__type-item">
+                <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
+                <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
+              </div>
+
+              <div class="event__type-item">
+                <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
+                <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
+              </div>
+
+              <div class="event__type-item">
+                <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+                <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
+              </div>
+
+              <div class="event__type-item">
+                <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
+                <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
+              </div>
+
+              <div class="event__type-item">
+                <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
+                <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
+              </div>
+
+              <div class="event__type-item">
+                <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
+                <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
+              </div>
+            </fieldset>
+          </div>`;
+};
+
+const createEventTypeTemplate = (type) => {
+  return `<label class="event__label  event__type-output" for="event-destination-1">
+            ${type}
+          </label>`;
+};
+
+const createEventDestinationTemplate = (destination) => {
+  return `<input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
+          <datalist id="destination-list-1">
+            <option value="Amsterdam"></option>
+            <option value="Geneva"></option>
+            <option value="Chamonix"></option>
+          </datalist>`;
+};
+
 const createEventEditOffersTemplate = (offers) => {
   const offersTemplate = createOffers(offers);
 
@@ -37,11 +116,14 @@ const createEventEditDescriptionTemplate = (information) => {
           </section>`;
 };
 
-const createEventEditTemplate = (event) => {
-  const {type, destination, times, price, offers, information} = event;
+const createEventEditTemplate = (data) => {
+  const {type, destination, times, price, offers, information} = data;
   const startTime = times.startDate.format(`DD/MM/YY HH:mm`);
   const endTime = times.endDate.format(`DD/MM/YY HH:mm`);
 
+  const typeIconTemplate = createEventTypeIconTemplate(type);
+  const typeTemplate = createEventTypeTemplate(type);
+  const destinationTemplate = createEventDestinationTemplate(destination);
   const offerTemplate = createEventEditOffersTemplate(offers);
   const descriptionTemplate = createEventEditDescriptionTemplate(information);
 
@@ -49,79 +131,11 @@ const createEventEditTemplate = (event) => {
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
-                    <label class="event__type  event__type-btn" for="event-type-toggle-1">
-                      <span class="visually-hidden">Choose event type</span>
-                      <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
-                    </label>
-                    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
-
-                    <div class="event__type-list">
-                      <fieldset class="event__type-group">
-                        <legend class="visually-hidden">Event type</legend>
-
-                        <div class="event__type-item">
-                          <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                          <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                          <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                          <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                          <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-                          <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                          <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-                          <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-                          <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                          <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                          <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-                        </div>
-                      </fieldset>
-                    </div>
+                    ${typeIconTemplate}
                   </div>
-
                   <div class="event__field-group  event__field-group--destination">
-                    <label class="event__label  event__type-output" for="event-destination-1">
-                      ${type}
-                    </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
-                    <datalist id="destination-list-1">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
-                    </datalist>
+                    ${typeTemplate}
+                    ${destinationTemplate}
                   </div>
 
                   <div class="event__field-group  event__field-group--time">
@@ -157,13 +171,14 @@ const createEventEditTemplate = (event) => {
 export default class EventEdit extends AbstractView {
   constructor(events) {
     super();
-    this._events = events;
+    this._data = EventEdit.parseEventToData(events);
+
     this._clickHandler = this._clickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._events);
+    return createEventEditTemplate(this._data);
   }
 
   _clickHandler(evt) {
@@ -173,7 +188,7 @@ export default class EventEdit extends AbstractView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(EventEdit.parseDataToEvent(this._data));
   }
 
   setFormSubmitHandler(callback) {
@@ -184,5 +199,25 @@ export default class EventEdit extends AbstractView {
   setRollupClickHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._clickHandler);
+  }
+
+  static parseEventToData(event) {
+    return Object.assign(
+        {},
+        event,
+        {
+          isType: null,
+          isDestination: null
+        }
+    );
+  }
+
+  static parseDataToEvent(data) {
+    data = Object.assign({}, data);
+
+    delete data.isType;
+    delete data.isDestination;
+
+    return data;
   }
 }
