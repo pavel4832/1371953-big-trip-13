@@ -1,5 +1,6 @@
 import {createOffers} from "./event-offers-available.js";
 import AbstractView from "./abstract-view.js";
+import {getNewInformation} from "../mock/event.js";
 
 const createEventTypeIconTemplate = (type) => {
   return `<label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -236,7 +237,8 @@ export default class EventEdit extends AbstractView {
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      destination: evt.target.value
+      destination: evt.target.value,
+      information: getNewInformation()
     });
   }
 

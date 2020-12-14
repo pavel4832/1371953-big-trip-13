@@ -108,6 +108,13 @@ const getPhotosDestination = () => {
   return photos;
 };
 
+export const getNewInformation = () => {
+  return {
+    description: getEventDescription(sentences),
+    photos: getPhotosDestination()
+  };
+};
+
 export const generateEvent = () => {
   const date = dayjs().add(getRandomInteger(0, DAY_COUNT), `day`);
 
