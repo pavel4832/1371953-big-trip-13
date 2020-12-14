@@ -175,6 +175,15 @@ export default class EventEdit extends AbstractView {
 
     this._clickHandler = this._clickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
+    this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
+
+    this.getElement()
+      .querySelector(`.event__type-input`)
+      .addEventListener(`change`, this._eventTypeToggleHandler);
+    this.getElement()
+      .querySelector(`.event__input--destination`)
+      .addEventListener(`change`, this._destinationToggleHandler);
   }
 
   getTemplate() {
@@ -205,6 +214,20 @@ export default class EventEdit extends AbstractView {
     parent.replaceChild(newElement, prevElement);
   }
 
+  _eventTypeToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      newType: evt.target.value
+    });
+  }
+
+  _destinationToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      newDestination: evt.target.value
+    });
+  }
+
   _clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
@@ -230,8 +253,8 @@ export default class EventEdit extends AbstractView {
         {},
         event,
         {
-          isType: null,
-          isDestination: null
+          newType: null,
+          newDestination: null
         }
     );
   }
@@ -239,8 +262,8 @@ export default class EventEdit extends AbstractView {
   static parseDataToEvent(data) {
     data = Object.assign({}, data);
 
-    delete data.isType;
-    delete data.isDestination;
+    delete data.newType;
+    delete data.newDestination;
 
     return data;
   }
