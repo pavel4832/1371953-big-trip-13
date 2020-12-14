@@ -34,7 +34,7 @@ export default class Event {
 
     this._eventComponent.setRollupClickHandler(this._handleRollupClick);
     this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._eventEditComponent.setRollupClickHandler(this._handleFormSubmit);
+    this._eventEditComponent.setRollupClickHandler(this._handleRollupClick);
     this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
@@ -98,11 +98,15 @@ export default class Event {
   }
 
   _handleRollupClick() {
-    this._replaceCardToForm();
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToCard();
+    } else {
+      this._replaceCardToForm();
+    }
   }
 
-  _handleFormSubmit() {
-    this._changeData(this._event);
+  _handleFormSubmit(event) {
+    this._changeData(event);
     this._replaceFormToCard();
   }
 }

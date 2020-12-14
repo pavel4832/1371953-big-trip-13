@@ -169,9 +169,9 @@ const createEventEditTemplate = (data) => {
 };
 
 export default class EventEdit extends AbstractView {
-  constructor(events) {
+  constructor(event) {
     super();
-    this._data = EventEdit.parseEventToData(events);
+    this._data = EventEdit.parseEventToData(event);
 
     this._clickHandler = this._clickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -179,8 +179,6 @@ export default class EventEdit extends AbstractView {
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
 
     this._setInnerHandlers();
-
-
   }
 
   getTemplate() {
@@ -216,11 +214,12 @@ export default class EventEdit extends AbstractView {
   restoreHandlers() {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setRollupClickHandler(this._callback.click);
   }
 
   _setInnerHandlers() {
     this.getElement()
-      .querySelector(`.event__type-input`)
+      .querySelector(`.event__type-group`)
       .addEventListener(`change`, this._eventTypeToggleHandler);
     this.getElement()
       .querySelector(`.event__input--destination`)
@@ -230,14 +229,14 @@ export default class EventEdit extends AbstractView {
   _eventTypeToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      newType: evt.target.value
+      type: evt.target.value
     });
   }
 
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      newDestination: evt.target.value
+      destination: evt.target.value
     });
   }
 
@@ -262,22 +261,10 @@ export default class EventEdit extends AbstractView {
   }
 
   static parseEventToData(event) {
-    return Object.assign(
-        {},
-        event,
-        {
-          newType: null,
-          newDestination: null
-        }
-    );
+    return Object.assign({}, event);
   }
 
   static parseDataToEvent(data) {
-    data = Object.assign({}, data);
-
-    delete data.newType;
-    delete data.newDestination;
-
-    return data;
+    return Object.assign({}, data);
   }
 }
