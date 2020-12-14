@@ -1,12 +1,49 @@
 import {createOffers} from "./event-offers-available.js";
 import AbstractView from "./abstract-view.js";
 
-const createEventsEditorTemplate = (event) => {
+const createEventEditOffersTemplate = (offers) => {
+  const offersTemplate = createOffers(offers);
+
+  return `<section class="event__section  event__section--offers">
+            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+            ${offersTemplate}
+          </section>`;
+};
+
+const createEventEditPhotosTemplate = (photos) => {
+  let photosList = ``;
+
+  photos.forEach((photo) => {
+    photosList += `<img class="event__photo" src="${photo}" alt="Event photo">`;
+  });
+
+  return `<div class="event__photos-container">
+            <div class="event__photos-tape">
+            ${photosList}
+            </div>
+          </div>`;
+};
+
+const createEventEditDescriptionTemplate = (information) => {
+  const description = information.description;
+  const photos = information.photos;
+
+  const photosTemplate = createEventEditPhotosTemplate(photos);
+
+  return `<section class="event__section  event__section--destination">
+            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+            <p class="event__destination-description">${description}</p>
+            ${photosTemplate}
+          </section>`;
+};
+
+const createEventEditTemplate = (event) => {
   const {type, destination, times, price, offers, information} = event;
   const startTime = times.startDate.format(`DD/MM/YY HH:mm`);
   const endTime = times.endDate.format(`DD/MM/YY HH:mm`);
-  const offersTemplate = createOffers(offers);
-  const description = information.description;
+
+  const offerTemplate = createEventEditOffersTemplate(offers);
+  const descriptionTemplate = createEventEditDescriptionTemplate(information);
 
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -110,15 +147,8 @@ const createEventsEditorTemplate = (event) => {
                   </button>
                 </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">
-                    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-                    ${offersTemplate}
-                  </section>
-
-                  <section class="event__section  event__section--destination">
-                    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${description}</p>
-                  </section>
+                  ${offerTemplate}
+                  ${descriptionTemplate}
                 </section>
               </form>
             </li>`;
@@ -133,7 +163,7 @@ export default class EventEdit extends AbstractView {
   }
 
   getTemplate() {
-    return createEventsEditorTemplate(this._events);
+    return createEventEditTemplate(this._events);
   }
 
   _clickHandler(evt) {
