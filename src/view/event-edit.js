@@ -178,12 +178,9 @@ export default class EventEdit extends AbstractView {
     this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
 
-    this.getElement()
-      .querySelector(`.event__type-input`)
-      .addEventListener(`change`, this._eventTypeToggleHandler);
-    this.getElement()
-      .querySelector(`.event__input--destination`)
-      .addEventListener(`change`, this._destinationToggleHandler);
+    this._setInnerHandlers();
+
+
   }
 
   getTemplate() {
@@ -212,6 +209,22 @@ export default class EventEdit extends AbstractView {
     const newElement = this.getElement();
 
     parent.replaceChild(newElement, prevElement);
+
+    this.restoreHandlers();
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelector(`.event__type-input`)
+      .addEventListener(`change`, this._eventTypeToggleHandler);
+    this.getElement()
+      .querySelector(`.event__input--destination`)
+      .addEventListener(`change`, this._destinationToggleHandler);
   }
 
   _eventTypeToggleHandler(evt) {
