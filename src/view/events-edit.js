@@ -181,6 +181,16 @@ export default class EventEdit extends AbstractView {
     return createEventEditTemplate(this._data);
   }
 
+  updateElement() {
+    let prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+
+    parent.replaceChild(newElement, prevElement);
+  }
+
   _clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
