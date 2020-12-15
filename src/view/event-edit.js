@@ -100,7 +100,8 @@ export default class EventEdit extends SmartView {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
-      offers: getEventOffers(ALL_OFFERS)
+      offers: getEventOffers(ALL_OFFERS),
+      isOffers: this._data.offers.length !== 0
     });
   }
 
@@ -108,7 +109,9 @@ export default class EventEdit extends SmartView {
     evt.preventDefault();
     this.updateData({
       destination: evt.target.value,
-      information: getNewInformation()
+      information: getNewInformation(),
+      isInformation: this._data.information !== {},
+      isPhotos: this._data.information.photos.length !== 0
     });
   }
 
