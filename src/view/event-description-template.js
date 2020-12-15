@@ -1,7 +1,7 @@
 import {createEventEditPhotosTemplate} from "./event-photos-template";
 
 export const createEventEditDescriptionTemplate = (information, isInformation, isPhotos) => {
-  const description = (isInformation) ? information.description : ``;
+  const description = isInformation ? information.description : ``;
   const photos = isPhotos ? information.photos : ``;
 
   const photosTemplate = isPhotos ? createEventEditPhotosTemplate(photos) : ``;
