@@ -7,15 +7,15 @@ import {createEventEditDescriptionTemplate} from "./event-description-template.j
 import {getEventOffers, getNewInformation, ALL_OFFERS} from "../mock/event.js";
 
 const createEventEditTemplate = (data) => {
-  const {type, destination, times, price, offers, information} = data;
+  const {type, destination, times, price, offers, information, isOffers, isInformation, isPhotos} = data;
   const startTime = times.startDate.format(`DD/MM/YY HH:mm`);
   const endTime = times.endDate.format(`DD/MM/YY HH:mm`);
 
   const typeIconTemplate = createEventTypeIconTemplate(type);
   const typeTemplate = createEventTypeTemplate(type);
   const destinationTemplate = createEventDestinationTemplate(destination);
-  const offerTemplate = createEventEditOffersTemplate(offers);
-  const descriptionTemplate = createEventEditDescriptionTemplate(information);
+  const offerTemplate = createEventEditOffersTemplate(offers, isOffers);
+  const descriptionTemplate = createEventEditDescriptionTemplate(information, isInformation, isPhotos);
 
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -133,10 +133,24 @@ export default class EventEdit extends SmartView {
   }
 
   static parseEventToData(event) {
-    return Object.assign({}, event);
+    return Object.assign(
+        {},
+        event,
+        {
+          isOffers: event.offers.length !== 0,
+          isInformation: event.information !== {},
+          isPhotos: event.information.photos.length !== 0
+        }
+    );
   }
 
   static parseDataToEvent(data) {
-    return Object.assign({}, data);
+    let newData = Object.assign({}, data);
+
+    delete newData.isOffers;
+    delete newData.isInformation;
+    delete newData.isPhotos;
+
+    return newData;
   }
 }
