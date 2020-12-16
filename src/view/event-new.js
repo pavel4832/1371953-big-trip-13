@@ -1,7 +1,14 @@
 import SmartView from "./smart.js";
-import {getNewInformation} from "../mock/event";
+import {getNewInformation, getTimes} from "../mock/event";
+import dayjs from "dayjs";
+import flatpickr from "flatpickr";
 
-const createEventsNewTemplate = () => {
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+
+const createEventsNewTemplate = (data) => {
+  const {isStartDate, isEndDate} = data;
+  const isSubmitDisabled = (isStartDate && isEndDate === null);
+
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -97,7 +104,7 @@ const createEventsNewTemplate = () => {
                     <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
                   </div>
 
-                  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
                   <button class="event__reset-btn" type="reset">Cancel</button>
                 </header>
                 <section class="event__details">
@@ -175,13 +182,19 @@ export default class EventNew extends SmartView {
   constructor() {
     super();
     this._data = {};
+    this._startDatepicker = null;
+    this._endDatepicker = null;
 
     this._clickHandler = this._clickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setStartDatepicker();
+    this._setEndDatepicker();
   }
 
   reset(event) {
@@ -198,6 +211,8 @@ export default class EventNew extends SmartView {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setRollupClickHandler(this._callback.click);
+    this._setStartDatepicker();
+    this._setEndDatepicker();
   }
 
   _setInnerHandlers() {
@@ -207,6 +222,36 @@ export default class EventNew extends SmartView {
     this.getElement()
       .querySelector(`.event__input--destination`)
       .addEventListener(`change`, this._destinationToggleHandler);
+  }
+
+  _setStartDatepicker() {
+    if (this._startDatepicker) {
+      this._startDatepicker.destroy();
+      this._startDatepicker = null;
+    }
+
+    this._startDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          defaultDate: this._data.times.startDate,
+          onChange: this._startDateChangeHandler
+        }
+    );
+  }
+
+  _setEndDatepicker() {
+    if (this._endDatepicker) {
+      this._endDatepicker.destroy();
+      this._endDatepicker = null;
+    }
+
+    this._endDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          defaultDate: this._data.times.endDate,
+          onChange: this._endDateChangeHandler
+        }
+    );
   }
 
   _eventTypeToggleHandler(evt) {
@@ -242,6 +287,22 @@ export default class EventNew extends SmartView {
   setRollupClickHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._clickHandler);
+  }
+
+  _startDateChangeHandler([date]) {
+    const newStartDate = dayjs(date).hour(23).minute(59).second(59);
+
+    this.updateData({
+      times: getTimes(newStartDate, this._data.times.endDate)
+    });
+  }
+
+  _endDateChangeHandler([date]) {
+    const newEndDate = dayjs(date).hour(23).minute(59).second(59);
+
+    this.updateData({
+      times: getTimes(this._data.times.startDate, newEndDate)
+    });
   }
 
   static parseDataToEvent(data) {
