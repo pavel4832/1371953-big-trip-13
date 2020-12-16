@@ -118,7 +118,11 @@ export default class EventEdit extends SmartView {
     this._startDatepicker = flatpickr(
         this.getElement().querySelector(`#event-start-time-1`),
         {
-          defaultDate: this._data.times.startDate,
+          enableTime: true,
+          altInput: true,
+          altFormat: `d/m/y H:i`,
+          dateFormat: `Y-m-d`,
+          defaultDate: this._data.times.startDate.toDate(),
           onChange: this._startDateChangeHandler
         }
     );
@@ -133,7 +137,11 @@ export default class EventEdit extends SmartView {
     this._endDatepicker = flatpickr(
         this.getElement().querySelector(`#event-end-time-1`),
         {
-          defaultDate: this._data.times.endDate,
+          enableTime: true,
+          altInput: true,
+          altFormat: `d/m/y H:i`,
+          dateFormat: `Y-m-d`,
+          defaultDate: this._data.times.endDate.toDate(),
           onChange: this._endDateChangeHandler
         }
     );
@@ -179,7 +187,7 @@ export default class EventEdit extends SmartView {
   }
 
   _startDateChangeHandler([date]) {
-    const newStartDate = dayjs(date).hour(23).minute(59).second(59);
+    const newStartDate = dayjs(date);
 
     this.updateData({
       times: getTimes(newStartDate, this._data.times.endDate)
@@ -187,7 +195,7 @@ export default class EventEdit extends SmartView {
   }
 
   _endDateChangeHandler([date]) {
-    const newEndDate = dayjs(date).hour(23).minute(59).second(59);
+    const newEndDate = dayjs(date);
 
     this.updateData({
       times: getTimes(this._data.times.startDate, newEndDate)

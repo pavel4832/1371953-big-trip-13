@@ -233,7 +233,11 @@ export default class EventNew extends SmartView {
     this._startDatepicker = flatpickr(
         this.getElement().querySelector(`#event-start-time-1`),
         {
-          defaultDate: this._data.times.startDate,
+          enableTime: true,
+          altInput: true,
+          altFormat: `d/m/y H:i`,
+          dateFormat: `Y-m-d`,
+          defaultDate: this._data.times.startDate.toDate(),
           onChange: this._startDateChangeHandler
         }
     );
@@ -248,7 +252,11 @@ export default class EventNew extends SmartView {
     this._endDatepicker = flatpickr(
         this.getElement().querySelector(`#event-end-time-1`),
         {
-          defaultDate: this._data.times.endDate,
+          enableTime: true,
+          altInput: true,
+          altFormat: `d/m/y H:i`,
+          dateFormat: `Y-m-d`,
+          defaultDate: this._data.times.endDate.toDate(),
           onChange: this._endDateChangeHandler
         }
     );
