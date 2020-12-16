@@ -1,5 +1,5 @@
 import EventsSortView from "../view/events-sort.js";
-import EventsListView from "../view/events-list.js";
+import EventsListView from "../view/event-list.js";
 import NoEventsView from "../view/no-events.js";
 import InfoPresenter from "./info.js";
 import EventPresenter from "./event.js";

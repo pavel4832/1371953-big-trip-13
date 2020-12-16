@@ -1,4 +1,5 @@
 import AbstractView from "./abstract-view.js";
+import {sortEventDay} from "../utils/event.js";
 
 const createTripInfoTemplate = (events) => {
   const startDay = events[0].times.startDate;
@@ -7,8 +8,14 @@ const createTripInfoTemplate = (events) => {
   let trip = [];
   let time;
 
-  for (let i = 0; i < events.length; i++) {
-    trip.push(events[i].destination);
+  if (events.length <= 3) {
+    events.forEach((event) => {
+      trip.push(event.destination);
+    });
+  } else {
+    trip.push(events[0].destination);
+    trip.push(`...`);
+    trip.push(events[events.length - 1].destination);
   }
 
   if (startDay.diff(endDay, `month`) === 0) {
@@ -29,7 +36,7 @@ const createTripInfoTemplate = (events) => {
 export default class TripInfo extends AbstractView {
   constructor(events) {
     super();
-    this._events = events;
+    this._events = events.slice().sort(sortEventDay);
   }
 
   getTemplate() {

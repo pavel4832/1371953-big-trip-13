@@ -1,4 +1,4 @@
-import {createOffersTemplate} from "./event-offers-list.js";
+import {createOffersTemplate} from "./event-offer-list.js";
 import AbstractView from "./abstract-view.js";
 
 const createEventsItemTemplate = (event) => {

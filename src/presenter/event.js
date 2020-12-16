@@ -1,5 +1,5 @@
-import EventView from "../view/events-item.js";
-import EventEditView from "../view/events-edit.js";
+import EventView from "../view/event.js";
+import EventEditView from "../view/event-edit.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
 const Mode = {
@@ -34,7 +34,7 @@ export default class Event {
 
     this._eventComponent.setRollupClickHandler(this._handleRollupClick);
     this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._eventEditComponent.setRollupClickHandler(this._handleFormSubmit);
+    this._eventEditComponent.setRollupClickHandler(this._handleRollupClick);
     this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
@@ -93,16 +93,22 @@ export default class Event {
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
+      this._eventEditComponent.reset(this._event);
       this._replaceFormToCard();
     }
   }
 
   _handleRollupClick() {
-    this._replaceCardToForm();
+    if (this._mode !== Mode.DEFAULT) {
+      this._eventEditComponent.reset(this._event);
+      this._replaceFormToCard();
+    } else {
+      this._replaceCardToForm();
+    }
   }
 
-  _handleFormSubmit() {
-    this._changeData(this._event);
+  _handleFormSubmit(event) {
+    this._changeData(event);
     this._replaceFormToCard();
   }
 }
