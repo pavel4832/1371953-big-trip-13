@@ -5,6 +5,9 @@ import {createEventDestinationTemplate} from "./event-destination-template.js";
 import {createEventEditOffersTemplate} from "./event-offers-template.js";
 import {createEventEditDescriptionTemplate} from "./event-description-template.js";
 import {getEventOffers, getNewInformation, ALL_OFFERS} from "../mock/event.js";
+import flatpickr from "flatpickr";
+
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createEventEditTemplate = (data) => {
   const {type, destination, times, price, offers, information, isOffers, isInformation, isPhotos} = data;
