@@ -55,10 +55,10 @@ const getShuffleArray = (target) => {
   return newArray;
 };
 
-export const getTimes = (dateStart, dateEnd) => {
-  const differenceDay = dateEnd.diff(dateStart, `day`);
-  const differenceHour = dateEnd.diff(dateStart, `hour`) - differenceDay * HOUR_COUNT;
-  const differenceMinutes = dateEnd.diff(dateStart, `minute`) - (differenceDay * HOUR_COUNT + differenceHour) * MINUTES_COUNT;
+export const getTimes = (startDate, endDate) => {
+  const differenceDay = endDate.diff(startDate, `day`);
+  const differenceHour = endDate.diff(startDate, `hour`) - differenceDay * HOUR_COUNT;
+  const differenceMinutes = endDate.diff(startDate, `minute`) - (differenceDay * HOUR_COUNT + differenceHour) * MINUTES_COUNT;
 
   let duration;
 
@@ -69,8 +69,8 @@ export const getTimes = (dateStart, dateEnd) => {
   }
 
   return {
-    startDate: dateStart,
-    endDate: dateEnd,
+    startDate,
+    endDate,
     duration
   };
 };
