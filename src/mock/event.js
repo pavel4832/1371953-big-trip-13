@@ -55,25 +55,21 @@ const getShuffleArray = (target) => {
   return newArray;
 };
 
-const getTimes = (date) => {
-  const durationDay = getRandomInteger(0, DAY_COUNT);
-  const durationHour = getRandomInteger(0, HOUR_COUNT);
-  const durationMinutes = getRandomInteger(0, MINUTES_COUNT);
-  const endDate = date.add(durationDay, `day`).add(durationHour, `hour`).add(durationMinutes, `minute`);
-  const differenceDay = endDate.diff(date, `day`);
-  const differenceHour = endDate.diff(date, `hour`) - differenceDay * HOUR_COUNT;
-  const differenceMinutes = endDate.diff(date, `minute`) - (differenceDay * HOUR_COUNT + differenceHour) * MINUTES_COUNT;
+export const getTimes = (startDate, endDate) => {
+  const differenceDay = endDate.diff(startDate, `day`);
+  const differenceHour = endDate.diff(startDate, `hour`) - differenceDay * HOUR_COUNT;
+  const differenceMinutes = endDate.diff(startDate, `minute`) - (differenceDay * HOUR_COUNT + differenceHour) * MINUTES_COUNT;
 
   let duration;
 
-  if (durationDay === 0) {
+  if (differenceDay === 0) {
     duration = (differenceHour === 0) ? `${differenceMinutes}M` : `${differenceHour}H ${differenceMinutes}M`;
   } else {
     duration = `${differenceDay}D ${differenceHour}H ${differenceMinutes}M`;
   }
 
   return {
-    startDate: date,
+    startDate,
     endDate,
     duration
   };
@@ -117,13 +113,17 @@ export const getNewInformation = () => {
 };
 
 export const generateEvent = () => {
-  const date = dayjs().add(getRandomInteger(0, DAY_COUNT), `day`);
+  const startDate = dayjs().add(getRandomInteger(0, DAY_COUNT), `day`);
+  const durationDay = getRandomInteger(0, DAY_COUNT);
+  const durationHour = getRandomInteger(0, HOUR_COUNT);
+  const durationMinutes = getRandomInteger(0, MINUTES_COUNT);
+  const endDate = startDate.add(durationDay, `day`).add(durationHour, `hour`).add(durationMinutes, `minute`);
 
   return {
     id: generateId(),
     type: EVENT_TYPES[getRandomInteger(0, EVENT_TYPES.length - 1)],
     destination: CITIES[getRandomInteger(0, CITIES.length - 1)],
-    times: getTimes(date),
+    times: getTimes(startDate, endDate),
     price: getPrice(),
     offers: getEventOffers(ALL_OFFERS),
     information: {

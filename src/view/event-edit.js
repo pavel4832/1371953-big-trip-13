@@ -4,10 +4,14 @@ import {createEventTypeTemplate} from "./event-type-template.js";
 import {createEventDestinationTemplate} from "./event-destination-template.js";
 import {createEventEditOffersTemplate} from "./event-offers-template.js";
 import {createEventEditDescriptionTemplate} from "./event-description-template.js";
-import {getEventOffers, getNewInformation, ALL_OFFERS} from "../mock/event.js";
+import {getEventOffers, getNewInformation, getTimes, ALL_OFFERS} from "../mock/event.js";
+import dayjs from "dayjs";
+import flatpickr from "flatpickr";
+
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createEventEditTemplate = (data) => {
-  const {type, destination, times, price, offers, information, isOffers, isInformation, isPhotos} = data;
+  const {type, destination, times, price, offers, information, isOffers, isInformation, isPhotos, isStartDate, isEndDate} = data;
   const startTime = times.startDate.format(`DD/MM/YY HH:mm`);
   const endTime = times.endDate.format(`DD/MM/YY HH:mm`);
 
@@ -16,6 +20,7 @@ const createEventEditTemplate = (data) => {
   const destinationTemplate = createEventDestinationTemplate(destination);
   const offerTemplate = createEventEditOffersTemplate(offers, isOffers);
   const descriptionTemplate = createEventEditDescriptionTemplate(information, isInformation, isPhotos);
+  const isSubmitDisabled = (isStartDate && startTime === null) || (isEndDate && endTime === null);
 
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -44,7 +49,7 @@ const createEventEditTemplate = (data) => {
                   <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
                 </div>
 
-                <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
                 <button class="event__reset-btn" type="reset">Delete</button>
                 <button class="event__rollup-btn" type="button">
                   <span class="visually-hidden">Open event</span>
@@ -62,13 +67,19 @@ export default class EventEdit extends SmartView {
   constructor(event) {
     super();
     this._data = EventEdit.parseEventToData(event);
+    this._startDatepicker = null;
+    this._endDatepicker = null;
 
     this._clickHandler = this._clickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setStartDatepicker();
+    this._setEndDatepicker();
   }
 
   reset(event) {
@@ -85,6 +96,8 @@ export default class EventEdit extends SmartView {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setRollupClickHandler(this._callback.click);
+    this._setStartDatepicker();
+    this._setEndDatepicker();
   }
 
   _setInnerHandlers() {
@@ -94,6 +107,44 @@ export default class EventEdit extends SmartView {
     this.getElement()
       .querySelector(`.event__input--destination`)
       .addEventListener(`change`, this._destinationToggleHandler);
+  }
+
+  _setStartDatepicker() {
+    if (this._startDatepicker) {
+      this._startDatepicker.destroy();
+      this._startDatepicker = null;
+    }
+
+    this._startDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          enableTime: true,
+          altInput: true,
+          altFormat: `d/m/y H:i`,
+          dateFormat: `Y-m-d`,
+          defaultDate: this._data.times.startDate.toDate(),
+          onChange: this._startDateChangeHandler
+        }
+    );
+  }
+
+  _setEndDatepicker() {
+    if (this._endDatepicker) {
+      this._endDatepicker.destroy();
+      this._endDatepicker = null;
+    }
+
+    this._endDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          altInput: true,
+          altFormat: `d/m/y H:i`,
+          dateFormat: `Y-m-d`,
+          defaultDate: this._data.times.endDate.toDate(),
+          onChange: this._endDateChangeHandler
+        }
+    );
   }
 
   _eventTypeToggleHandler(evt) {
@@ -135,6 +186,22 @@ export default class EventEdit extends SmartView {
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._clickHandler);
   }
 
+  _startDateChangeHandler([date]) {
+    const newStartDate = dayjs(date);
+
+    this.updateData({
+      times: getTimes(newStartDate, this._data.times.endDate)
+    });
+  }
+
+  _endDateChangeHandler([date]) {
+    const newEndDate = dayjs(date);
+
+    this.updateData({
+      times: getTimes(this._data.times.startDate, newEndDate)
+    });
+  }
+
   static parseEventToData(event) {
     return Object.assign(
         {},
@@ -142,7 +209,9 @@ export default class EventEdit extends SmartView {
         {
           isOffers: event.offers.length !== 0,
           isInformation: event.information !== {},
-          isPhotos: event.information.photos.length !== 0
+          isPhotos: event.information.photos.length !== 0,
+          isStartDate: event.times.startDate !== null,
+          isEndDate: event.times.endDate !== null
         }
     );
   }
@@ -153,6 +222,8 @@ export default class EventEdit extends SmartView {
     delete newData.isOffers;
     delete newData.isInformation;
     delete newData.isPhotos;
+    delete newData.isStartDate;
+    delete newData.isEndDate;
 
     return newData;
   }
