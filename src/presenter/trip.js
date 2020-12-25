@@ -3,9 +3,10 @@ import EventsListView from "../view/event-list.js";
 import NoEventsView from "../view/no-events.js";
 import InfoPresenter from "./info.js";
 import EventPresenter from "./event.js";
+import EventNewPresenter from "./event-new.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortEventDay, sortEventTime, sortEventPrice} from "../utils/event.js";
-import {SortType, UpdateType, UserAction} from "../const.js";
+import {SortType, UpdateType, UserAction, FilterType} from "../const.js";
 import {filter} from "../utils/filter.js";
 
 export default class Trip {
@@ -28,12 +29,20 @@ export default class Trip {
 
     this._eventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._eventNewPresenter = new EventNewPresenter(this._tripComponent, this._handleViewAction);
   }
 
   init() {
     render(this._tripContainer, this._tripComponent, RenderPosition.BEFOREEND);
 
     this._renderTrip();
+  }
+
+  createEvent() {
+    this._currentSortType = SortType.DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._eventNewPresenter.init();
   }
 
   _getEvents() {
@@ -54,6 +63,7 @@ export default class Trip {
   }
 
   _handleModeChange() {
+    this._eventNewPresenter.destroy();
     Object
       .values(this._eventPresenterList)
       .forEach((presenter) => presenter.resetView());
@@ -130,6 +140,8 @@ export default class Trip {
   }
 
   _clearTrip({resetSortType = false} = {}) {
+    this._eventNewPresenter.destroy();
+
     Object
       .values(this._eventPresenterList)
       .forEach((presenter) => presenter.destroy());

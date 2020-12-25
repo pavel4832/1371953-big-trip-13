@@ -10,8 +10,25 @@ import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
+const BLANK_EVENT = {
+  type: `Taxi`,
+  destination: `Amsterdam`,
+  times: {
+    startDate: dayjs(),
+    endDate: dayjs()
+  },
+  price: 0,
+  offers: getEventOffers(ALL_OFFERS),
+  information: {
+    description: ``,
+    photos: ``
+  },
+  isFavorite: false,
+  isNew: true
+};
+
 const createEventEditTemplate = (data) => {
-  const {type, destination, times, price, offers, information, isOffers, isInformation, isPhotos, isStartDate, isEndDate} = data;
+  const {type, destination, times, price, offers, information, isNew, isOffers, isInformation, isPhotos, isStartDate, isEndDate} = data;
   const startTime = times.startDate.format(`DD/MM/YY HH:mm`);
   const endTime = times.endDate.format(`DD/MM/YY HH:mm`);
 
@@ -21,6 +38,11 @@ const createEventEditTemplate = (data) => {
   const offerTemplate = createEventEditOffersTemplate(offers, isOffers);
   const descriptionTemplate = createEventEditDescriptionTemplate(information, isInformation, isPhotos);
   const isSubmitDisabled = (isStartDate && startTime === null) || (isEndDate && endTime === null);
+
+  const closeButtonText = (isNew) ? `Cancel` : `Delete`;
+  const rollButton = (!isNew) ? `<button class="event__rollup-btn" type="button">
+                                   <span class="visually-hidden">Open event</span>
+                                 </button>` : ``;
 
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -50,10 +72,8 @@ const createEventEditTemplate = (data) => {
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
-                <button class="event__reset-btn" type="reset">Delete</button>
-                <button class="event__rollup-btn" type="button">
-                  <span class="visually-hidden">Open event</span>
-                </button>
+                <button class="event__reset-btn" type="reset">${closeButtonText}</button>
+                ${rollButton}
               </header>
               <section class="event__details">
                 ${offerTemplate}
@@ -64,7 +84,7 @@ const createEventEditTemplate = (data) => {
 };
 
 export default class EventEdit extends SmartView {
-  constructor(event) {
+  constructor(event = BLANK_EVENT) {
     super();
     this._data = EventEdit.parseEventToData(event);
     this._startDatepicker = null;
@@ -112,8 +132,11 @@ export default class EventEdit extends SmartView {
     this._setStartDatepicker();
     this._setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
-    this.setRollupClickHandler(this._callback.click);
     this.setDeleteClickHandler(this._callback.deleteClick);
+
+    if (!this._data.isNew) {
+      this.setRollupClickHandler(this._callback.click);
+    }
   }
 
   _setInnerHandlers() {

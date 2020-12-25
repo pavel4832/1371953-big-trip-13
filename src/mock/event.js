@@ -43,7 +43,7 @@ export const ALL_OFFERS = [
 
 const sentences = SAMPLE_TEXT.split(`. `);
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, RADIX);
+export const generateId = () => Date.now() + parseInt(Math.random() * 10000, RADIX);
 
 const getShuffleArray = (target) => {
   const newArray = target.slice();
@@ -131,6 +131,7 @@ export const generateEvent = () => {
       description: getEventDescription(sentences),
       photos: getPhotosDestination()
     },
-    isFavorite: Boolean(getRandomInteger(0, 1))
+    isFavorite: Boolean(getRandomInteger(0, 1)),
+    isNew: false
   };
 };
