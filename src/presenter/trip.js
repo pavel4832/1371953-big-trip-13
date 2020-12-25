@@ -6,10 +6,12 @@ import EventPresenter from "./event.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortEventDay, sortEventTime, sortEventPrice} from "../utils/event.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
+import {filter} from "../utils/filter.js";
 
 export default class Trip {
-  constructor(tripContainer, eventsModel) {
+  constructor(tripContainer, eventsModel, filterModel) {
     this._eventsModel = eventsModel;
+    this._filterModel = filterModel;
     this._tripContainer = tripContainer;
     this._infoPresenter = null;
     this._eventPresenterList = {};
@@ -25,6 +27,7 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._eventsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -34,16 +37,20 @@ export default class Trip {
   }
 
   _getEvents() {
+    const filterType = this._filterModel.getFilter();
+    const events = this._eventsModel.getEvents();
+    const filteredEvents = filter[filterType](events);
+
     switch (this._currentSortType) {
       case SortType.DEFAULT:
-        return this._eventsModel.getEvents().slice().sort(sortEventDay);
+        return filteredEvents.sort(sortEventDay);
       case SortType.TIME:
-        return this._eventsModel.getEvents().slice().sort(sortEventTime);
+        return filteredEvents.sort(sortEventTime);
       case SortType.PRICE:
-        return this._eventsModel.getEvents().slice().sort(sortEventPrice);
+        return filteredEvents.sort(sortEventPrice);
     }
 
-    return this._eventsModel.getEvents();
+    return filteredEvents;
   }
 
   _handleModeChange() {

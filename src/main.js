@@ -19,7 +19,7 @@ eventsModel.setEvents(events);
 
 const filterModel = new FilterModel();
 
-const tripPresenter = new TripPresenter(siteEventsElement, eventsModel);
+const tripPresenter = new TripPresenter(siteEventsElement, eventsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteFilterHeader, filterModel, eventsModel);
 
 render(siteMenuHeader, new SiteMenuView(), RenderPosition.AFTER);
