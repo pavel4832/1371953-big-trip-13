@@ -72,6 +72,7 @@ export default class EventEdit extends SmartView {
 
     this._clickHandler = this._clickHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
@@ -80,6 +81,20 @@ export default class EventEdit extends SmartView {
     this._setInnerHandlers();
     this._setStartDatepicker();
     this._setEndDatepicker();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._startDatepicker) {
+      this._startDatepicker.destroy();
+      this._startDatepicker = null;
+    }
+
+    if (this._endDatepicker) {
+      this._endDatepicker.destroy();
+      this._endDatepicker = null;
+    }
   }
 
   reset(event) {
@@ -94,10 +109,11 @@ export default class EventEdit extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
-    this.setFormSubmitHandler(this._callback.formSubmit);
-    this.setRollupClickHandler(this._callback.click);
     this._setStartDatepicker();
     this._setEndDatepicker();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setRollupClickHandler(this._callback.click);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   _setInnerHandlers() {
@@ -200,6 +216,16 @@ export default class EventEdit extends SmartView {
     this.updateData({
       times: getTimes(this._data.times.startDate, newEndDate)
     });
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(EventEdit.parseDataToEvent(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
   }
 
   static parseEventToData(event) {

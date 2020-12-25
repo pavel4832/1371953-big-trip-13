@@ -122,13 +122,6 @@ export default class Trip {
     render(this._tripContainer, this._noEventsComponent, RenderPosition.BEFOREEND);
   }
 
-  _clearEventsList() {
-    Object
-      .values(this._eventPresenterList)
-      .forEach((presenter) => presenter.destroy());
-    this._eventPresenterList = {};
-  }
-
   _clearTrip({resetSortType = false} = {}) {
     Object
       .values(this._eventPresenterList)

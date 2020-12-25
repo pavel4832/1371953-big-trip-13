@@ -2,6 +2,7 @@ import EventView from "../view/event.js";
 import EventEditView from "../view/event-edit.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
+import {isDatesEqual} from "../utils/event.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -21,6 +22,7 @@ export default class Event {
     this._handleRollupClick = this._handleRollupClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -37,6 +39,7 @@ export default class Event {
     this._eventComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._eventEditComponent.setRollupClickHandler(this._handleRollupClick);
     this._eventEditComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._eventEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this._eventListContainer, this._eventComponent, RenderPosition.BEFOREEND);
@@ -110,12 +113,23 @@ export default class Event {
     }
   }
 
-  _handleFormSubmit(event) {
+  _handleFormSubmit(update) {
+    const isMinorUpdate =
+      !isDatesEqual(this._event.times, update.times);
+
     this._changeData(
         UserAction.UPDATE_EVENT,
+        isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+        update
+    );
+    this._replaceFormToCard();
+  }
+
+  _handleDeleteClick(event) {
+    this._changeData(
+        UserAction.DELETE_EVENT,
         UpdateType.MINOR,
         event
     );
-    this._replaceFormToCard();
   }
 }
