@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import {getRandomInteger} from "../utils/common.js";
 
 const DAY_COUNT = 30;
+const DAY_BEFORE = 15;
 const HOUR_COUNT = 24;
 const MINUTES_COUNT = 60;
 const PRICE_COUNT = 1000;
@@ -113,7 +114,7 @@ export const getNewInformation = () => {
 };
 
 export const generateEvent = () => {
-  const startDate = dayjs().add(getRandomInteger(0, DAY_COUNT), `day`);
+  const startDate = dayjs().add((getRandomInteger(0, DAY_COUNT) - DAY_BEFORE), `day`);
   const durationDay = getRandomInteger(0, DAY_COUNT);
   const durationHour = getRandomInteger(0, HOUR_COUNT);
   const durationMinutes = getRandomInteger(0, MINUTES_COUNT);
