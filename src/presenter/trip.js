@@ -9,7 +9,8 @@ import {sortEventTime, sortEventPrice} from "../utils/event.js";
 import {SortType} from "../const.js";
 
 export default class Trip {
-  constructor(tripContainer) {
+  constructor(tripContainer, eventsModel) {
+    this._eventsModel = eventsModel;
     this._tripContainer = tripContainer;
     this._infoPresenter = null;
     this._eventPresenterList = {};
@@ -31,6 +32,10 @@ export default class Trip {
     render(this._tripContainer, this._tripComponent, RenderPosition.BEFOREEND);
 
     this._renderTrip();
+  }
+
+  _getEvents() {
+    return this._eventsModel.getEvents();
   }
 
   _sortTasks(sortType) {
