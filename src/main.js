@@ -22,4 +22,4 @@ render(siteMenuHeader, new SiteMenuView(), RenderPosition.AFTER);
 
 render(siteFilterHeader, new SiteFilterView(), RenderPosition.AFTER);
 
-tripPresenter.init(events);
+tripPresenter.init();

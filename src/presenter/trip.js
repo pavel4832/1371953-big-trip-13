@@ -3,7 +3,6 @@ import EventsListView from "../view/event-list.js";
 import NoEventsView from "../view/no-events.js";
 import InfoPresenter from "./info.js";
 import EventPresenter from "./event.js";
-import {updateItem} from "../utils/common.js";
 import {render, RenderPosition} from "../utils/render.js";
 import {sortEventTime, sortEventPrice} from "../utils/event.js";
 import {SortType} from "../const.js";
@@ -25,32 +24,21 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init(tripEvents) {
-    this._tripEvents = tripEvents.slice();
-    this._sourcedTripEvents = tripEvents.slice();
-
+  init() {
     render(this._tripContainer, this._tripComponent, RenderPosition.BEFOREEND);
 
     this._renderTrip();
   }
 
   _getEvents() {
-    return this._eventsModel.getEvents();
-  }
-
-  _sortTasks(sortType) {
-    switch (sortType) {
+    switch (this._currentSortType) {
       case SortType.TIME:
-        this._tripEvents.sort(sortEventTime);
-        break;
+        return this._eventsModel.getEvents().slice().sort(sortEventTime);
       case SortType.PRICE:
-        this._tripEvents.sort(sortEventPrice);
-        break;
-      default:
-        this._tripEvents = this._sourcedTripEvents.slice();
+        return this._eventsModel.getEvents().slice().sort(sortEventPrice);
     }
 
-    this._currentSortType = sortType;
+    return this._eventsModel.getEvents();
   }
 
   _handleModeChange() {
@@ -60,10 +48,10 @@ export default class Trip {
   }
 
   _handleEventChange(updatedEvent) {
-    this._tripEvents = updateItem(this._tripEvents, updatedEvent);
+    // Здесь будем вызывать обновление модели
     this._eventPresenterList[updatedEvent.id].init(updatedEvent);
     this._infoPresenter.destroy();
-    this._infoPresenter.init(this._tripEvents);
+    this._infoPresenter.init(this._getEvents());
   }
 
   _handleSortTypeChange(sortType) {
@@ -71,14 +59,14 @@ export default class Trip {
       return;
     }
 
-    this._sortTasks(sortType);
+    this._currentSortType = sortType;
     this._clearEventsList();
     this._renderEventsList();
   }
 
   _renderTripInfo() {
     this._infoPresenter = new InfoPresenter();
-    this._infoPresenter.init(this._tripEvents);
+    this._infoPresenter.init(this._getEvents());
   }
 
   _renderSort() {
@@ -93,7 +81,7 @@ export default class Trip {
   }
 
   _renderEventsList() {
-    this._tripEvents.forEach((tripEvent) => this._renderEvent(tripEvent));
+    this._getEvents().forEach((tripEvent) => this._renderEvent(tripEvent));
   }
 
   _renderNoEvents() {
@@ -108,7 +96,7 @@ export default class Trip {
   }
 
   _renderTrip() {
-    if (this._tripEvents.length === 0) {
+    if (this._getEvents().length === 0) {
       this._renderNoEvents();
       return;
     }
