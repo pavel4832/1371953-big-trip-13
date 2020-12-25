@@ -10,13 +10,11 @@ import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
+const RADIX = 10;
 const BLANK_EVENT = {
   type: `Taxi`,
-  destination: `Amsterdam`,
-  times: {
-    startDate: dayjs(),
-    endDate: dayjs()
-  },
+  destination: ``,
+  times: getTimes(dayjs(), dayjs()),
   price: 0,
   offers: getEventOffers(ALL_OFFERS),
   information: {
@@ -68,7 +66,7 @@ const createEventEditTemplate = (data) => {
                     <span class="visually-hidden">Price</span>
                     &euro;
                   </label>
-                  <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+                  <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
@@ -95,6 +93,7 @@ export default class EventEdit extends SmartView {
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._eventTypeToggleHandler = this._eventTypeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
+    this._priceToggleHandler = this._priceToggleHandler.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
@@ -146,6 +145,9 @@ export default class EventEdit extends SmartView {
     this.getElement()
       .querySelector(`.event__input--destination`)
       .addEventListener(`change`, this._destinationToggleHandler);
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .addEventListener(`change`, this._priceToggleHandler);
   }
 
   _setStartDatepicker() {
@@ -202,6 +204,13 @@ export default class EventEdit extends SmartView {
       information: getNewInformation(),
       isInformation: this._data.information !== {},
       isPhotos: this._data.information.photos.length !== 0
+    });
+  }
+
+  _priceToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      price: parseInt(evt.target.value, RADIX)
     });
   }
 

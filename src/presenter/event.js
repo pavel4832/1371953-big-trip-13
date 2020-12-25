@@ -2,7 +2,7 @@ import EventView from "../view/event.js";
 import EventEditView from "../view/event-edit.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
-import {isDatesEqual} from "../utils/event.js";
+import {isDataEqual, isDatesEqual} from "../utils/event.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -115,7 +115,9 @@ export default class Event {
 
   _handleFormSubmit(update) {
     const isMinorUpdate =
-      !isDatesEqual(this._event.times, update.times);
+      !isDataEqual(this._event.destination, update.destination) ||
+      !isDatesEqual(this._event.times, update.times) ||
+      !isDataEqual(this._event.price, update.price);
 
     this._changeData(
         UserAction.UPDATE_EVENT,

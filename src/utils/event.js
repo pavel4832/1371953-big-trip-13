@@ -15,6 +15,10 @@ export const sortEventPrice = (eventA, eventB) => {
   return eventB.price - eventA.price;
 };
 
+export const isDataEqual = (dateA, dateB) => {
+  return (dateA === null && dateB === null) ? true : dateA === dateB;
+};
+
 export const isDatesEqual = (dateA, dateB) => {
   return (dateA === null && dateB === null) ? true : dayjs(dateA.startDate).isSame(dateB.startDate, `day`) && dayjs(dateA.endDate).isSame(dateB.endDate, `day`);
 };
