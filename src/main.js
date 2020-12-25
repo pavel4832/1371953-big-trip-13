@@ -13,6 +13,20 @@ const siteTripMainElement = document.querySelector(`.trip-main`);
 const siteEventsElement = document.querySelector(`.trip-events`);
 const [siteMenuHeader, siteFilterHeader] = siteTripMainElement.querySelectorAll(`h2`);
 const events = new Array(EVENT_COUNT).fill().map(generateEvent).sort(sortEventDay);
+const filters = [
+  {
+    type: `everything`,
+    name: `Everything`
+  },
+  {
+    type: `future`,
+    name: `Future`
+  },
+  {
+    type: `past`,
+    name: `Past`
+  }
+];
 
 const eventsModel = new EventsModel();
 eventsModel.setEvents(events);
@@ -23,6 +37,6 @@ const tripPresenter = new TripPresenter(siteEventsElement, eventsModel);
 
 render(siteMenuHeader, new SiteMenuView(), RenderPosition.AFTER);
 
-render(siteFilterHeader, new SiteFilterView(), RenderPosition.AFTER);
+render(siteFilterHeader, new SiteFilterView(filters, `everything`), RenderPosition.AFTER);
 
 tripPresenter.init();
