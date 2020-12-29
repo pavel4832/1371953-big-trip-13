@@ -15,18 +15,18 @@ export const sortEventPrice = (eventA, eventB) => {
   return eventB.price - eventA.price;
 };
 
-export const isDataEqual = (dateA, dateB) => {
-  return (dateA === null && dateB === null) ? true : dateA === dateB;
+export const isDataEqual = (dataA, dataB) => {
+  return (!dataA && !dataB) ? true : dataA === dataB;
 };
 
 export const isDatesEqual = (dateA, dateB) => {
-  return (dateA === null && dateB === null) ? true : dayjs(dateA.startDate).isSame(dateB.startDate, `day`) && dayjs(dateA.endDate).isSame(dateB.endDate, `day`);
+  return (!dateA && !dateB) ? true : dayjs(dateA.startDate).isSame(dateB.startDate, `day`) && dayjs(dateA.endDate).isSame(dateB.endDate, `day`);
 };
 
 export const isEventFuture = (dueDate) => {
-  return dueDate === null ? false : dayjs().isBefore(dueDate, `day`);
+  return !dueDate ? false : dayjs().isBefore(dueDate, `day`);
 };
 
 export const isEventPast = (dueDate) => {
-  return dueDate === null ? false : dayjs().isAfter(dueDate, `day`);
+  return !dueDate ? false : dayjs().isAfter(dueDate, `day`);
 };
