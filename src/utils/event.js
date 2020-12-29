@@ -20,7 +20,10 @@ export const isDataEqual = (dataA, dataB) => {
 };
 
 export const isDatesEqual = (dateA, dateB) => {
-  return (!dateA && !dateB) ? true : dayjs(dateA.startDate).isSame(dateB.startDate, `day`) && dayjs(dateA.endDate).isSame(dateB.endDate, `day`);
+  const isStartDateSame = dayjs(dateA.startDate).isSame(dateB.startDate, `day`);
+  const isEndDateSame = dayjs(dateA.endDate).isSame(dateB.endDate, `day`);
+
+  return (!dateA && !dateB) ? true : isStartDateSame && isEndDateSame;
 };
 
 export const isEventFuture = (dueDate) => {
