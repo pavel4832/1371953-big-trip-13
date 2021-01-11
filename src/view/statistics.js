@@ -1,17 +1,27 @@
 import AbstractView from "./abstract-view.js";
+import {amountMoneyByType, makeItemsUniq} from "../utils/statistics.js";
+
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const BAR_HEIGHT = 55;
 
 const renderMoneyChart = (moneyCtx, events) => {
+  const eventTypes = events.map((event) => event.type);
+  const uniqEvents = makeItemsUniq(eventTypes);
+  const MoneyByTypes = uniqEvents.map((event) => amountMoneyByType(events, event));
+  const typeLabels = uniqEvents.map((event) => event.toUpperCase());
+  const heightCount = uniqEvents.length - 1;
+
+  moneyCtx.height = BAR_HEIGHT * heightCount;
+
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`TAXI`, `BUS`, `TRAIN`, `SHIP`, `TRANSPORT`, `DRIVE`],
+      labels: typeLabels,
       datasets: [{
-        data: [400, 300, 200, 160, 150, 100],
+        data: MoneyByTypes,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`,
@@ -262,7 +272,7 @@ export default class Statistics extends AbstractView {
     const typeCtx = this.getElement().querySelector(`.statistics__chart--transport`);
     const timeCtx = this.getElement().querySelector(`.statistics__chart--time`);
 
-    moneyCtx.height = BAR_HEIGHT * 5;
+
     typeCtx.height = BAR_HEIGHT * 5;
     timeCtx.height = BAR_HEIGHT * 5;
 
