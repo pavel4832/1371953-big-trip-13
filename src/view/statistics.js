@@ -3,7 +3,7 @@ import {renderMoneyChart, renderTypeChart, renderTimeChart} from "../utils/stati
 
 const createStatisticsTemplate = () => {
 
-  return `<section class="statistics">
+  return `<section class="statistics trip-events--hidden">
             <h2 class="visually-hidden">Trip statistics</h2>
 
             <div class="statistics__item statistics__item--money">
