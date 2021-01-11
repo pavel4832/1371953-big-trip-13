@@ -1,5 +1,5 @@
 import AbstractView from "./abstract-view.js";
-import {amountMoneyByType, makeItemsUniq} from "../utils/statistics.js";
+import {makeItemsUniq, amountMoneyByType, countEventsByType} from "../utils/statistics.js";
 
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -9,11 +9,10 @@ const BAR_HEIGHT = 55;
 const renderMoneyChart = (moneyCtx, events) => {
   const eventTypes = events.map((event) => event.type);
   const uniqEvents = makeItemsUniq(eventTypes);
-  const MoneyByTypes = uniqEvents.map((event) => amountMoneyByType(events, event));
+  const moneyByTypes = uniqEvents.map((event) => amountMoneyByType(events, event));
   const typeLabels = uniqEvents.map((event) => event.toUpperCase());
-  const heightCount = uniqEvents.length - 1;
 
-  moneyCtx.height = BAR_HEIGHT * heightCount;
+  moneyCtx.height = BAR_HEIGHT * uniqEvents.length - 1;
 
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
@@ -21,7 +20,7 @@ const renderMoneyChart = (moneyCtx, events) => {
     data: {
       labels: typeLabels,
       datasets: [{
-        data: MoneyByTypes,
+        data: moneyByTypes,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`,
@@ -82,13 +81,20 @@ const renderMoneyChart = (moneyCtx, events) => {
 };
 
 const renderTypeChart = (typeCtx, events) => {
+  const eventTypes = events.map((event) => event.type);
+  const uniqEvents = makeItemsUniq(eventTypes);
+  const eventByTypes = uniqEvents.map((event) => countEventsByType(events, event));
+  const typeLabels = uniqEvents.map((event) => event.toUpperCase());
+
+  typeCtx.height = BAR_HEIGHT * uniqEvents.length - 1;
+
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`TAXI`, `BUS`, `TRAIN`, `SHIP`, `TRANSPORT`, `DRIVE`],
+      labels: typeLabels,
       datasets: [{
-        data: [4, 3, 2, 1, 1, 1],
+        data: eventByTypes,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`,

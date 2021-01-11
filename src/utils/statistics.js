@@ -6,3 +6,7 @@ export const amountMoneyByType = (events, type) => {
 
   return prices.reduce((previousValue, currentItem) => previousValue + currentItem, 0);
 };
+
+export const countEventsByType = (events, type) => {
+  return events.filter((event) => event.type === type).length;
+};
