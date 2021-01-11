@@ -1,3 +1,4 @@
+import TripBoardView from "../view/trip-board.js";
 import EventsSortView from "../view/events-sort.js";
 import EventsListView from "../view/event-list.js";
 import NoEventsView from "../view/no-events.js";
@@ -19,6 +20,7 @@ export default class Trip {
     this._currentSortType = SortType.DEFAULT;
     this._sortComponent = null;
 
+    this._boardComponent = new TripBoardView();
     this._tripComponent = new EventsListView();
     this._noEventsComponent = new NoEventsView();
 
@@ -31,8 +33,8 @@ export default class Trip {
   }
 
   init() {
-    render(this._tripContainer, this._tripComponent, RenderPosition.BEFOREEND);
-
+    render(this._tripContainer, this._boardComponent, RenderPosition.BEFOREEND);
+    render(this._boardComponent, this._tripComponent, RenderPosition.BEFOREEND);
     this._eventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
@@ -42,7 +44,7 @@ export default class Trip {
   destroy() {
     this._clearTrip({resetSortType: true});
 
-    remove(this._tripComponent);
+    remove(this._boardComponent);
 
     this._eventsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
@@ -135,7 +137,7 @@ export default class Trip {
     this._sortComponent = new EventsSortView(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 
-    render(this._tripContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
+    render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderEvent(event) {
@@ -149,7 +151,7 @@ export default class Trip {
   }
 
   _renderNoEvents() {
-    render(this._tripContainer, this._noEventsComponent, RenderPosition.BEFOREEND);
+    render(this._boardComponent, this._noEventsComponent, RenderPosition.BEFOREEND);
   }
 
   _clearTrip({resetSortType = false} = {}) {
@@ -161,6 +163,7 @@ export default class Trip {
     this._eventPresenterList = {};
 
     this._infoPresenter.destroy();
+
     remove(this._sortComponent);
     remove(this._noEventsComponent);
 
