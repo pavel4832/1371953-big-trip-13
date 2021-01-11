@@ -1,4 +1,18 @@
 import AbstractView from "./abstract-view.js";
+import Chart from "chart.js";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+
+const renderMoneyChart = (moneyCtx, events) => {
+  // Функция для отрисовки графика по деньгам
+};
+
+const renderTypeChart = (typeCtx, events) => {
+  // Функция для отрисовки графика по типам
+};
+
+const renderTimeChart = (timeCtx, events) => {
+  // Функция для отрисовки графика по времени
+};
 
 const createStatisticsTemplate = () => {
 
@@ -24,12 +38,47 @@ export default class Statistics extends AbstractView {
     super();
 
     this._events = events;
+
+    this._moneyChart = null;
+    this._typeChart = null;
+    this._timeChart = null;
+
+    this._setCharts();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
+      this._moneyChart = null;
+      this._typeChart = null;
+      this._timeChart = null;
+    }
   }
 
   getTemplate() {
     return createStatisticsTemplate();
   }
+
   _setCharts() {
-    // Нужно отрисовать два графика
+    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
+      this._moneyChart = null;
+      this._typeChart = null;
+      this._timeChart = null;
+    }
+
+    const BAR_HEIGHT = 55;
+
+    const moneyCtx = this.getElement().querySelector(`.statistics__chart--money`);
+    const typeCtx = this.getElement().querySelector(`.statistics__chart--transport`);
+    const timeCtx = this.getElement().querySelector(`.statistics__chart--time`);
+
+    moneyCtx.height = BAR_HEIGHT * 5;
+    typeCtx.height = BAR_HEIGHT * 5;
+    timeCtx.height = BAR_HEIGHT * 5;
+
+    this._moneyChart = renderMoneyChart(moneyCtx, this._events);
+    this._typeChart = renderTypeChart(typeCtx, this._events);
+    this._timeChart = renderTimeChart(timeCtx, this._events);
   }
 }
