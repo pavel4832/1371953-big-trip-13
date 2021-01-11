@@ -1,3 +1,14 @@
+export const MenuItem = {
+  TABLE: `Table`,
+  STATISTICS: `Stats`
+};
+
+export const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
+};
+
 export const SortType = {
   DEFAULT: `sort-day`,
   TIME: `sort-time`,
@@ -14,10 +25,4 @@ export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`
-};
-
-export const FilterType = {
-  EVERYTHING: `everything`,
-  FUTURE: `future`,
-  PAST: `past`
 };
