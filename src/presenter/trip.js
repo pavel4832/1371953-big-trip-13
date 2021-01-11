@@ -1,6 +1,8 @@
+import TripBoardView from "../view/trip-board.js";
 import EventsSortView from "../view/events-sort.js";
 import EventsListView from "../view/event-list.js";
 import NoEventsView from "../view/no-events.js";
+import StatisticsView from "../view/statistics.js";
 import InfoPresenter from "./info.js";
 import EventPresenter from "./event.js";
 import EventNewPresenter from "./event-new.js";
@@ -19,6 +21,7 @@ export default class Trip {
     this._currentSortType = SortType.DEFAULT;
     this._sortComponent = null;
 
+    this._boardComponent = new TripBoardView();
     this._tripComponent = new EventsListView();
     this._noEventsComponent = new NoEventsView();
 
@@ -27,22 +30,44 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._eventsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-
     this._eventNewPresenter = new EventNewPresenter(this._tripComponent, this._handleViewAction);
   }
 
   init() {
-    render(this._tripContainer, this._tripComponent, RenderPosition.BEFOREEND);
+    render(this._tripContainer, this._boardComponent, RenderPosition.BEFOREEND);
+    render(this._boardComponent, this._tripComponent, RenderPosition.BEFOREEND);
+    this._eventsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
 
     this._renderTrip();
+  }
+
+  destroy() {
+    this._clearTrip({resetSortType: true});
+
+    remove(this._boardComponent);
+    remove(this._statisticsComponent);
+
+    this._eventsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createEvent() {
     this._currentSortType = SortType.DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._eventNewPresenter.init();
+  }
+
+  changeTableToStats() {
+    this._boardComponent.hideElement();
+    this._statisticsComponent.showElement();
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+  }
+
+  changeStatsToTable() {
+    this._boardComponent.showElement();
+    this._statisticsComponent.hideElement();
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
   }
 
   _getEvents() {
@@ -110,8 +135,12 @@ export default class Trip {
   }
 
   _renderTripInfo() {
-    this._infoPresenter = new InfoPresenter();
-    this._infoPresenter.init(this._getEvents());
+    if (this._infoPresenter !== null) {
+      this._infoPresenter.destroy();
+    }
+
+    this._infoPresenter = new InfoPresenter(this._getEvents());
+    this._infoPresenter.init();
   }
 
   _renderSort() {
@@ -122,7 +151,7 @@ export default class Trip {
     this._sortComponent = new EventsSortView(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 
-    render(this._tripContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
+    render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderEvent(event) {
@@ -136,7 +165,12 @@ export default class Trip {
   }
 
   _renderNoEvents() {
-    render(this._tripContainer, this._noEventsComponent, RenderPosition.BEFOREEND);
+    render(this._boardComponent, this._noEventsComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderStatistic() {
+    this._statisticsComponent = new StatisticsView(this._eventsModel.getEvents());
+    render(this._tripContainer, this._statisticsComponent, RenderPosition.BEFOREEND);
   }
 
   _clearTrip({resetSortType = false} = {}) {
@@ -148,8 +182,10 @@ export default class Trip {
     this._eventPresenterList = {};
 
     this._infoPresenter.destroy();
+
     remove(this._sortComponent);
     remove(this._noEventsComponent);
+    remove(this._statisticsComponent);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -165,5 +201,9 @@ export default class Trip {
     this._renderTripInfo();
     this._renderSort();
     this._renderEventsList();
+    this._renderStatistic();
+    if (this._boardComponent.getElement().classList.contains(`trip-events--hidden`)) {
+      this._statisticsComponent.showElement();
+    }
   }
 }
