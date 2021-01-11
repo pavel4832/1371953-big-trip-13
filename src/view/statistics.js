@@ -1,5 +1,5 @@
 import AbstractView from "./abstract-view.js";
-import {makeItemsUniq, amountMoneyByType, countEventsByType} from "../utils/statistics.js";
+import {makeItemsUniq, countMoneyByType, countEventsByType, countTimeByType} from "../utils/statistics.js";
 
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -7,9 +7,9 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 const BAR_HEIGHT = 55;
 
 const renderMoneyChart = (moneyCtx, events) => {
-  const eventTypes = events.map((event) => event.type);
+  const eventTypes = events.map((event) => event.type).sort();
   const uniqEvents = makeItemsUniq(eventTypes);
-  const moneyByTypes = uniqEvents.map((event) => amountMoneyByType(events, event));
+  const moneyByTypes = uniqEvents.map((event) => countMoneyByType(events, event));
   const typeLabels = uniqEvents.map((event) => event.toUpperCase());
 
   moneyCtx.height = BAR_HEIGHT * uniqEvents.length - 1;
@@ -81,7 +81,7 @@ const renderMoneyChart = (moneyCtx, events) => {
 };
 
 const renderTypeChart = (typeCtx, events) => {
-  const eventTypes = events.map((event) => event.type);
+  const eventTypes = events.map((event) => event.type).sort();
   const uniqEvents = makeItemsUniq(eventTypes);
   const eventByTypes = uniqEvents.map((event) => countEventsByType(events, event));
   const typeLabels = uniqEvents.map((event) => event.toUpperCase());
@@ -155,13 +155,20 @@ const renderTypeChart = (typeCtx, events) => {
 };
 
 const renderTimeChart = (timeCtx, events) => {
+  const eventTypes = events.map((event) => event.type).sort();
+  const uniqEvents = makeItemsUniq(eventTypes);
+  const timeByTypes = uniqEvents.map((event) => countTimeByType(events, event));
+  const typeLabels = uniqEvents.map((event) => event.toUpperCase());
+
+  timeCtx.height = BAR_HEIGHT * uniqEvents.length - 1;
+
   return new Chart(timeCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`TAXI`, `BUS`, `TRAIN`, `SHIP`, `TRANSPORT`, `DRIVE`],
+      labels: typeLabels,
       datasets: [{
-        data: [2, 3, 2, 2, 1, 1],
+        data: timeByTypes,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`,
