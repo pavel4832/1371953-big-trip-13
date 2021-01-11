@@ -29,11 +29,11 @@ render(siteMenuHeader, siteMenuComponent, RenderPosition.AFTER);
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
-      // Показать доску
+      tripPresenter.init();
       // Скрыть статистику
       break;
     case MenuItem.STATISTICS:
-      // Скрыть доску
+      tripPresenter.destroy();
       // Показать статистику
       break;
   }
