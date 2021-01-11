@@ -119,8 +119,12 @@ export default class Trip {
   }
 
   _renderTripInfo() {
-    this._infoPresenter = new InfoPresenter();
-    this._infoPresenter.init(this._getEvents());
+    if (this._infoPresenter !== null) {
+      this._infoPresenter.destroy();
+    }
+
+    this._infoPresenter = new InfoPresenter(this._getEvents());
+    this._infoPresenter.init();
   }
 
   _renderSort() {

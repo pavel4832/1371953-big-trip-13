@@ -25,4 +25,12 @@ export default class Abstract {
   removeElement() {
     this._element = null;
   }
+
+  showElement() {
+    this._element.parentNode.classList.remove(`trip-events--hidden`);
+  }
+
+  hideElement() {
+    this._element.parentNode.classList.add(`trip-events--hidden`);
+  }
 }
