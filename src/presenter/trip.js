@@ -61,13 +61,13 @@ export default class Trip {
   changeTableToStats() {
     this._boardComponent.hideElement();
     this._statisticsComponent.showElement();
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING, true);
   }
 
   changeStatsToTable() {
     this._boardComponent.showElement();
     this._statisticsComponent.hideElement();
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING, false);
   }
 
   _getEvents() {
