@@ -4,7 +4,7 @@ import FilterPresenter from "./presenter/filter.js";
 import EventsModel from "./model/events.js";
 import FilterModel from "./model/filter.js";
 import {render, RenderPosition} from "./utils/render.js";
-import {MenuItem} from "./const.js";
+import {MenuItem, UpdateType} from "./const.js";
 import Api from "./api.js";
 
 const AUTHORIZATION = `Basic hsjkjhfgajks434jka845`;
@@ -46,9 +46,13 @@ siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 filterPresenter.init();
 tripPresenter.init();
 
-api.getEvents().then((events) => {
-  eventsModel.setEvents(events);
-});
+api.getEvents()
+  .then((events) => {
+    eventsModel.setEvents(UpdateType.INIT, events);
+  })
+  .catch(() => {
+    eventsModel.setEvents(UpdateType.INIT, []);
+  });
 
 addNewButtonElement.addEventListener(`click`, (evt) => {
   evt.preventDefault();
