@@ -1,4 +1,4 @@
-import {CITIES} from "../mock/event.js";
+import {CITIES} from "../utils/event.js";
 
 const createCitiesDataList = (cities) => {
   let citiesList = ``;
