@@ -15,6 +15,19 @@ export const SortType = {
   PRICE: `sort-price`
 };
 
+export const EventType = {
+  "taxi": `Taxi`,
+  "bus": `Bus`,
+  "train": `Train`,
+  "ship": `Ship`,
+  "transport": `Transport`,
+  "drive": `Drive`,
+  "flight": `Flight`,
+  "check-in": `Check-in`,
+  "sightseeing": `Sightseeing`,
+  "restaurant": `Restaurant`
+};
+
 export const UserAction = {
   UPDATE_EVENT: `UPDATE_EVENT`,
   ADD_EVENT: `ADD_EVENT`,
