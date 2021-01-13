@@ -34,8 +34,6 @@ export default class Trip {
   }
 
   init() {
-    render(this._tripContainer, this._boardComponent, RenderPosition.BEFOREEND);
-    render(this._boardComponent, this._tripComponent, RenderPosition.BEFOREEND);
     this._eventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
@@ -143,6 +141,11 @@ export default class Trip {
     this._infoPresenter.init();
   }
 
+  _renderBoard() {
+    render(this._tripContainer, this._boardComponent, RenderPosition.BEFOREEND);
+    render(this._boardComponent, this._tripComponent, RenderPosition.BEFOREEND);
+  }
+
   _renderSort() {
     if (this._sortComponent !== null) {
       this._sortComponent = null;
@@ -199,9 +202,11 @@ export default class Trip {
     }
 
     this._renderTripInfo();
+    this._renderBoard();
     this._renderSort();
     this._renderEventsList();
     this._renderStatistic();
+
     if (this._boardComponent.getElement().classList.contains(`trip-events--hidden`)) {
       this._statisticsComponent.showElement();
     }

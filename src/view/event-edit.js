@@ -4,7 +4,8 @@ import {createEventTypeTemplate} from "./event-type-template.js";
 import {createEventDestinationTemplate} from "./event-destination-template.js";
 import {createEventEditOffersTemplate} from "./event-offers-template.js";
 import {createEventEditDescriptionTemplate} from "./event-description-template.js";
-import {getEventOffers, getNewInformation, getTimes, ALL_OFFERS} from "../mock/event.js";
+import {getTimes} from "../utils/event.js";
+import {getEventOffers, getNewInformation, ALL_OFFERS} from "../mock/event.js";
 import dayjs from "dayjs";
 import flatpickr from "flatpickr";
 

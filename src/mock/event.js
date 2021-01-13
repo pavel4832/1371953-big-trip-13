@@ -16,27 +16,27 @@ export const CITIES = [`Amsterdam`, `Chamonix`, `Geneva`];
 export const ALL_OFFERS = [
   {
     type: `event-offer-luggage`,
-    name: `Add luggage`,
+    title: `Add luggage`,
     price: 30
   },
   {
     type: `event-offer-comfort`,
-    name: `Switch to comfort class`,
+    title: `Switch to comfort class`,
     price: 100
   },
   {
     type: `event-offer-meal`,
-    name: `Add meal`,
+    title: `Add meal`,
     price: 15
   },
   {
     type: `event-offer-seats`,
-    name: `Choose seats`,
+    title: `Choose seats`,
     price: 5
   },
   {
     type: `event-offer-train`,
-    name: `Travel by train`,
+    title: `Travel by train`,
     price: 40
   }
 ];
