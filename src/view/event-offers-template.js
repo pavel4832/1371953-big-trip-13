@@ -1,10 +1,10 @@
-import {createOffers} from "./event-offers-available";
+import {createOffers} from "./event-offers-available.js";
 
-export const createEventEditOffersTemplate = (offers, isOffers) => {
-  const offersList = isOffers ? createOffers(offers) : ``;
+export const createEventEditOffersTemplate = (type, allOffers, checkedOffers, isOffers) => {
+  const offersList = createOffers(type, allOffers, checkedOffers, isOffers);
 
-  return isOffers ? `<section class="event__section  event__section--offers">
+  return `<section class="event__section  event__section--offers">
             <h3 class="event__section-title  event__section-title--offers">Offers</h3>
             ${offersList}
-          </section>` : ``;
+          </section>`;
 };

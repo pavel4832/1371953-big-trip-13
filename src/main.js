@@ -1,5 +1,5 @@
 import SiteMenuView from "./view/site-menu.js";
-import TripPresenter from "./presenter/trip";
+import TripPresenter from "./presenter/trip.js";
 import FilterPresenter from "./presenter/filter.js";
 import EventsModel from "./model/events.js";
 import FilterModel from "./model/filter.js";
@@ -15,12 +15,15 @@ const siteMainElement = document.querySelector(`.page-main .page-body__container
 const addNewButtonElement = document.querySelector(`.trip-main__event-add-btn`);
 const [siteMenuHeader, siteFilterHeader] = siteControlsElement.querySelectorAll(`h2`);
 
+let destinationList = [];
+let offerList = [];
+
 const siteMenuComponent = new SiteMenuView();
 
 const eventsModel = new EventsModel();
 const filterModel = new FilterModel();
 
-const tripPresenter = new TripPresenter(siteMainElement, eventsModel, filterModel);
+const tripPresenter = new TripPresenter(siteMainElement, eventsModel, filterModel, destinationList, offerList);
 const filterPresenter = new FilterPresenter(siteFilterHeader, filterModel, eventsModel);
 
 const api = new Api(END_POINT, AUTHORIZATION);
@@ -45,6 +48,22 @@ siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 filterPresenter.init();
 tripPresenter.init();
+
+api.getDestinations()
+  .then((destination) => {
+    tripPresenter.setDestination(destination);
+  })
+  .catch(() => {
+    tripPresenter.setDestination([]);
+  });
+
+api.getOffers()
+  .then((offers) => {
+    tripPresenter.setOffers(offers);
+  })
+  .catch(() => {
+    tripPresenter.setOffers([]);
+  });
 
 api.getEvents()
   .then((events) => {

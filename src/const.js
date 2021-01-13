@@ -1,3 +1,20 @@
+import {getTimes} from "./utils/event";
+import dayjs from "dayjs";
+
+export const BLANK_EVENT = {
+  type: `taxi`,
+  destination: {
+    description: ``,
+    name: ``,
+    pictures: []
+  },
+  times: getTimes(dayjs(), dayjs()),
+  price: 0,
+  offers: [],
+  isFavorite: false,
+  isNew: true
+};
+
 export const MenuItem = {
   TABLE: `Table`,
   STATISTICS: `Stats`

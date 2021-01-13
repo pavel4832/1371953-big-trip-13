@@ -13,37 +13,37 @@ export const createEventTypeIconTemplate = (type) => {
 
               <div class="event__type-item">
                 <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">${EventType.taxi}</label>
+                <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">${EventType[`taxi`]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">${EventType.bus}</label>
+                <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">${EventType[`bus`]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                <label class="event__type-label  event__type-label--train" for="event-type-train-1">${EventType.train}</label>
+                <label class="event__type-label  event__type-label--train" for="event-type-train-1">${EventType[`train`]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">${EventType.ship}</label>
+                <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">${EventType[`ship`]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-                <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">${EventType.transport}</label>
+                <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">${EventType[`transport`]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">${EventType.drive}</label>
+                <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">${EventType[`drive`]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-                <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">${EventType.flight}</label>
+                <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">${EventType[`flight`]}</label>
               </div>
 
               <div class="event__type-item">
@@ -53,12 +53,12 @@ export const createEventTypeIconTemplate = (type) => {
 
               <div class="event__type-item">
                 <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">${EventType.sightseeing}</label>
+                <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">${EventType[`sightseeing`]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">${EventType.restaurant}</label>
+                <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">${EventType[`restaurant`]}</label>
               </div>
             </fieldset>
           </div>`;

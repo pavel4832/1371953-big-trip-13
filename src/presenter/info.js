@@ -1,6 +1,6 @@
 import TripInfoView from "../view/trip-info.js";
 import TripCostView from "../view/trip-cost.js";
-import {remove, render, RenderPosition} from "../utils/render";
+import {remove, render, RenderPosition} from "../utils/render.js";
 
 const siteTripMainElement = document.querySelector(`.trip-main`);
 

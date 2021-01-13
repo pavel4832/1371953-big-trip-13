@@ -1,5 +1,6 @@
 import {createOffersTemplate} from "./event-offer-list.js";
 import AbstractView from "./abstract-view.js";
+import {EventType} from "../const.js";
 
 const createEventsItemTemplate = (event) => {
   const {type, destination, times, price, offers, isFavorite} = event;
@@ -19,7 +20,7 @@ const createEventsItemTemplate = (event) => {
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">${type} ${destination}</h3>
+                <h3 class="event__title">${EventType[type]} ${destination.name}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
                     <time class="event__start-time" datetime="${startTime}">${times.startDate.format(`HH:mm`)}</time>
@@ -47,15 +48,15 @@ const createEventsItemTemplate = (event) => {
 };
 
 export default class Event extends AbstractView {
-  constructor(events) {
+  constructor(event) {
     super();
-    this._events = events;
+    this._event = event;
     this._editClickHandler = this._editClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
-    return createEventsItemTemplate(this._events);
+    return createEventsItemTemplate(this._event);
   }
 
   _editClickHandler(evt) {

@@ -4,37 +4,22 @@ import {createEventTypeTemplate} from "./event-type-template.js";
 import {createEventDestinationTemplate} from "./event-destination-template.js";
 import {createEventEditOffersTemplate} from "./event-offers-template.js";
 import {createEventEditDescriptionTemplate} from "./event-description-template.js";
-import {getTimes, getEventOffers, getNewInformation, ALL_OFFERS} from "../utils/event.js";
+import {getTimes} from "../utils/event.js";
 import dayjs from "dayjs";
 import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
-const RADIX = 10;
-const BLANK_EVENT = {
-  type: `Taxi`,
-  destination: ``,
-  times: getTimes(dayjs(), dayjs()),
-  price: 0,
-  offers: getEventOffers(ALL_OFFERS),
-  information: {
-    description: ``,
-    photos: ``
-  },
-  isFavorite: false,
-  isNew: true
-};
-
-const createEventEditTemplate = (data) => {
-  const {type, destination, times, price, offers, information, isNew, isOffers, isInformation, isPhotos, isStartDate, isEndDate} = data;
+const createEventEditTemplate = (data, destinationList, offerList) => {
+  const {type, destination, times, price, offers, isNew, isStartDate, isEndDate, isOffers} = data;
   const startTime = times.startDate.format(`DD/MM/YY HH:mm`);
   const endTime = times.endDate.format(`DD/MM/YY HH:mm`);
 
   const typeIconTemplate = createEventTypeIconTemplate(type);
   const typeTemplate = createEventTypeTemplate(type);
-  const destinationTemplate = createEventDestinationTemplate(destination);
-  const offerTemplate = createEventEditOffersTemplate(offers, isOffers);
-  const descriptionTemplate = createEventEditDescriptionTemplate(information, isInformation, isPhotos);
+  const destinationTemplate = createEventDestinationTemplate(destination, destinationList);
+  const offerTemplate = createEventEditOffersTemplate(type, offerList, offers, isOffers);
+  const descriptionTemplate = createEventEditDescriptionTemplate(destination, destinationList);
   const isSubmitDisabled = (isStartDate && startTime === null) || (isEndDate && endTime === null);
 
   const closeButtonText = (isNew) ? `Cancel` : `Delete`;
@@ -82,8 +67,11 @@ const createEventEditTemplate = (data) => {
 };
 
 export default class EventEdit extends SmartView {
-  constructor(event = BLANK_EVENT) {
+  constructor(event, destinationList, offerList) {
     super();
+    this._destinationList = destinationList;
+    this._offerList = offerList;
+
     this._data = EventEdit.parseEventToData(event);
     this._startDatepicker = null;
     this._endDatepicker = null;
@@ -123,7 +111,7 @@ export default class EventEdit extends SmartView {
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._data);
+    return createEventEditTemplate(this._data, this._destinationList, this._offerList);
   }
 
   restoreHandlers() {
@@ -192,25 +180,22 @@ export default class EventEdit extends SmartView {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
-      offers: getEventOffers(ALL_OFFERS),
-      isOffers: this._data.offers.length !== 0
+      offers: EventEdit.setOffers(this._offerList, evt.target.value),
+      isOffers: true
     });
   }
 
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      destination: evt.target.value,
-      information: getNewInformation(),
-      isInformation: this._data.information !== {},
-      isPhotos: this._data.information.photos.length !== 0
+      destination: EventEdit.setDestination(this._destinationList, evt.target.value)
     });
   }
 
   _priceToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      price: parseInt(evt.target.value, RADIX)
+      price: evt.target.value
     });
   }
 
@@ -265,11 +250,9 @@ export default class EventEdit extends SmartView {
         {},
         event,
         {
-          isOffers: event.offers.length !== 0,
-          isInformation: event.information !== {},
-          isPhotos: event.information.photos.length !== 0,
           isStartDate: event.times.startDate !== null,
-          isEndDate: event.times.endDate !== null
+          isEndDate: event.times.endDate !== null,
+          ieOffers: false
         }
     );
   }
@@ -277,12 +260,18 @@ export default class EventEdit extends SmartView {
   static parseDataToEvent(data) {
     let newData = Object.assign({}, data);
 
-    delete newData.isOffers;
-    delete newData.isInformation;
-    delete newData.isPhotos;
     delete newData.isStartDate;
     delete newData.isEndDate;
+    delete newData.isOffers;
 
     return newData;
+  }
+
+  static setDestination(destinations, name) {
+    return destinations.find((destination) => destination.name === name);
+  }
+
+  static setOffers(offers, type) {
+    return offers.find((offer) => offer.type === type).offers;
   }
 }

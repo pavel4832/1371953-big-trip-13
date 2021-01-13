@@ -17,7 +17,6 @@ export default class Trip {
     this._eventsModel = eventsModel;
     this._filterModel = filterModel;
     this._tripContainer = tripContainer;
-
     this._eventPresenterList = {};
     this._currentSortType = SortType.DEFAULT;
     this._isLoading = true;
@@ -35,7 +34,7 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._eventNewPresenter = new EventNewPresenter(this._tripComponent, this._handleViewAction);
+    this._eventNewPresenter = new EventNewPresenter(this._tripComponent, this._destinationList, this._offerList, this._handleViewAction);
   }
 
   init() {
@@ -44,6 +43,14 @@ export default class Trip {
 
     this._renderBoard();
     this._renderTrip();
+  }
+
+  setDestination(destinations) {
+    this._destinationList = destinations.slice();
+  }
+
+  setOffers(offers) {
+    this._offerList = offers.slice();
   }
 
   destroy() {
@@ -169,7 +176,7 @@ export default class Trip {
   }
 
   _renderEvent(event) {
-    const eventPresenter = new EventPresenter(this._tripComponent, this._handleViewAction, this._handleModeChange);
+    const eventPresenter = new EventPresenter(this._tripComponent, this._destinationList, this._offerList, this._handleViewAction, this._handleModeChange);
     eventPresenter.init(event);
     this._eventPresenterList[event.id] = eventPresenter;
   }

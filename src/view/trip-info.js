@@ -13,9 +13,9 @@ const createTripInfoTemplate = (events) => {
       trip.push(event.destination);
     });
   } else {
-    trip.push(events[0].destination);
+    trip.push(events[0].destination.name);
     trip.push(`...`);
-    trip.push(events[events.length - 1].destination);
+    trip.push(events[events.length - 1].destination.name);
   }
 
   if (startDay.diff(endDay, `month`) === 0) {
