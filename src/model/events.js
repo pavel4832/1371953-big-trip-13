@@ -73,10 +73,10 @@ export default class Events extends Observer {
         }
     );
 
-    delete event.date_from;
-    delete event.date_to;
-    delete event.base_price;
-    delete event.is_favorite;
+    delete adaptedEvent.date_from;
+    delete adaptedEvent.date_to;
+    delete adaptedEvent.base_price;
+    delete adaptedEvent.is_favorite;
 
     return adaptedEvent;
   }

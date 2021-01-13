@@ -3,6 +3,7 @@ import EventsSortView from "../view/events-sort.js";
 import EventsListView from "../view/event-list.js";
 import NoEventsView from "../view/no-events.js";
 import StatisticsView from "../view/statistics.js";
+import LoadingView from "../view/loading.js";
 import InfoPresenter from "./info.js";
 import EventPresenter from "./event.js";
 import EventNewPresenter from "./event-new.js";
@@ -16,14 +17,18 @@ export default class Trip {
     this._eventsModel = eventsModel;
     this._filterModel = filterModel;
     this._tripContainer = tripContainer;
-    this._infoPresenter = null;
+
     this._eventPresenterList = {};
     this._currentSortType = SortType.DEFAULT;
+    this._isLoading = true;
+
+    this._infoPresenter = null;
     this._sortComponent = null;
 
     this._boardComponent = new TripBoardView();
     this._tripComponent = new EventsListView();
     this._noEventsComponent = new NoEventsView();
+    this._loadingComponent = new LoadingView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -37,6 +42,7 @@ export default class Trip {
     this._eventsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
+    this._renderBoard();
     this._renderTrip();
   }
 
@@ -119,6 +125,11 @@ export default class Trip {
         this._clearTrip({resetSortType: true});
         this._renderTrip();
         break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderTrip();
+        break;
     }
   }
 
@@ -171,6 +182,10 @@ export default class Trip {
     render(this._boardComponent, this._noEventsComponent, RenderPosition.BEFOREEND);
   }
 
+  _renderLoading() {
+    render(this._boardComponent, this._loadingComponent, RenderPosition.BEFOREEND);
+  }
+
   _renderStatistic() {
     this._statisticsComponent = new StatisticsView(this._eventsModel.getEvents());
     render(this._tripContainer, this._statisticsComponent, RenderPosition.BEFOREEND);
@@ -188,6 +203,7 @@ export default class Trip {
 
     remove(this._sortComponent);
     remove(this._noEventsComponent);
+    remove(this._loadingComponent);
     remove(this._statisticsComponent);
 
     if (resetSortType) {
@@ -196,13 +212,17 @@ export default class Trip {
   }
 
   _renderTrip() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     if (this._getEvents().length === 0) {
       this._renderNoEvents();
       return;
     }
 
     this._renderTripInfo();
-    this._renderBoard();
     this._renderSort();
     this._renderEventsList();
     this._renderStatistic();
