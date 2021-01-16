@@ -184,6 +184,7 @@ export default class EventEdit extends SmartView {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
+      offers: []
     });
   }
 
