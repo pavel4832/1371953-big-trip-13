@@ -23,6 +23,12 @@ export const getTimes = (startDate, endDate) => {
   };
 };
 
+export const getOffersByType = (allOffers, type) => {
+  const currentOfferElement = allOffers.find((offer) => offer.type === type);
+
+  return currentOfferElement.offers;
+};
+
 export const sortEventDay = (eventA, eventB) => {
   return eventA.times.startDate - eventB.times.startDate;
 };

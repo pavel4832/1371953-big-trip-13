@@ -1,12 +1,11 @@
-export const createOffers = (type, allOffers, checkedOffers, isOffers) => {
+export const createEventEditOffersTemplate = (type, allOffers, checkedOffers, isOffers) => {
   const currentOfferElement = allOffers.find((offer) => offer.type === type);
   const currentOfferList = currentOfferElement.offers;
 
   let offerList = ``;
 
   currentOfferList .forEach((offer) => {
-    const re = / /g;
-    const idName = offer.title.replace(re, `-`);
+    const idName = offer.title;
     let checked = ``;
 
     if (!isOffers) {
@@ -27,7 +26,10 @@ export const createOffers = (type, allOffers, checkedOffers, isOffers) => {
                   </div>`;
   });
 
-  return `<div class="event__available-offers">
-            ${offerList}
-          </div>`;
+  return `<section class="event__section  event__section--offers">
+            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+            <div class="event__available-offers">
+              ${offerList}
+            </div>
+          </section>`;
 };

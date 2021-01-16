@@ -1,5 +1,6 @@
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import dayjs from "dayjs";
 
 const BAR_HEIGHT = 55;
 
@@ -21,9 +22,9 @@ const countEventsByType = (events, type) => {
 
 const countTimeByType = (events, type) => {
   const eventsByType = events.filter((event) => event.type === type);
-  const times = eventsByType.map((event) => event.times.endDate.diff(event.times.startDate, `day`));
+  const times = eventsByType.map((event) => event.times.endDate.diff(event.times.startDate));
 
-  return times.reduce((previousValue, currentItem) => previousValue + currentItem, 0);
+  return dayjs(times.reduce((previousValue, currentItem) => previousValue + currentItem, 0)).format(`D`);
 };
 
 export const renderMoneyChart = (moneyCtx, events) => {
