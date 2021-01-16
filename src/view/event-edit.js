@@ -5,6 +5,7 @@ import {createEventDestinationTemplate} from "./event-destination-template.js";
 import {createEventEditOffersTemplate} from "./event-offers-available.js";
 import {createEventEditDescriptionTemplate} from "./event-description-template.js";
 import {getTimes, getOffersByType} from "../utils/event.js";
+import {RADIX} from "../const.js";
 import dayjs from "dayjs";
 import flatpickr from "flatpickr";
 
@@ -209,7 +210,7 @@ export default class EventEdit extends SmartView {
   _priceToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      price: parseInt(evt.target.value, 10)
+      price: parseInt(evt.target.value, RADIX)
     });
   }
 

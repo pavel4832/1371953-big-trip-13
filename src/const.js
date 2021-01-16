@@ -1,6 +1,8 @@
 import {getTimes} from "./utils/event";
 import dayjs from "dayjs";
 
+export const RADIX = 10;
+
 export const BLANK_EVENT = {
   type: `taxi`,
   destination: {

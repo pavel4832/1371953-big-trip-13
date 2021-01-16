@@ -43,14 +43,6 @@ export default class Trip {
     this._renderTrip();
   }
 
-  setDestination(destinations) {
-    this._destinationList = destinations.slice();
-  }
-
-  setOffers(offers) {
-    this._offerList = offers.slice();
-  }
-
   destroy() {
     this._clearTrip({resetSortType: true});
 
@@ -62,7 +54,10 @@ export default class Trip {
   }
 
   createEvent() {
-    this._eventNewPresenter = new EventNewPresenter(this._tripComponent, this._destinationList, this._offerList, this._handleViewAction);
+    const destinationList = this._eventsModel.getDestination();
+    const offerList = this._eventsModel.getOffers();
+
+    this._eventNewPresenter = new EventNewPresenter(this._tripComponent, destinationList, offerList, this._handleViewAction);
 
     this._currentSortType = SortType.DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
@@ -180,7 +175,11 @@ export default class Trip {
   }
 
   _renderEvent(event) {
-    const eventPresenter = new EventPresenter(this._tripComponent, this._destinationList, this._offerList, this._handleViewAction, this._handleModeChange);
+    const destinationList = this._eventsModel.getDestination();
+    const offerList = this._eventsModel.getOffers();
+
+    const eventPresenter = new EventPresenter(this._tripComponent, destinationList, offerList, this._handleViewAction, this._handleModeChange);
+
     eventPresenter.init(event);
     this._eventPresenterList[event.id] = eventPresenter;
   }
@@ -215,7 +214,10 @@ export default class Trip {
     remove(this._sortComponent);
     remove(this._noEventsComponent);
     remove(this._loadingComponent);
-    remove(this._statisticsComponent);
+
+    if (this._statisticsComponent) {
+      remove(this._statisticsComponent);
+    }
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;

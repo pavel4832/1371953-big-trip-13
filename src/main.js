@@ -46,32 +46,29 @@ const handleSiteMenuClick = (menuItem) => {
 render(siteMenuHeader, siteMenuComponent, RenderPosition.AFTER);
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
-filterPresenter.init();
-tripPresenter.init();
-
 api.getDestinations()
   .then((destination) => {
-    tripPresenter.setDestination(destination);
+    eventsModel.setDestination(UpdateType.INIT, destination);
   })
   .catch(() => {
-    tripPresenter.setDestination([]);
+    eventsModel.setDestination(UpdateType.INIT, []);
   });
 
 api.getOffers()
   .then((offers) => {
-    tripPresenter.setOffers(offers);
+    eventsModel.setOffers(UpdateType.INIT, offers);
   })
   .catch(() => {
-    tripPresenter.setOffers([]);
+    eventsModel.setOffers(UpdateType.INIT, []);
   });
 
 api.getEvents()
   .then((events) => {
     eventsModel.setEvents(UpdateType.INIT, events);
-  })
-  .catch(() => {
-    eventsModel.setEvents(UpdateType.INIT, []);
   });
+
+filterPresenter.init();
+tripPresenter.init();
 
 addNewButtonElement.addEventListener(`click`, (evt) => {
   evt.preventDefault();
