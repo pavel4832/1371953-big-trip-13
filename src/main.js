@@ -15,18 +15,15 @@ const siteMainElement = document.querySelector(`.page-main .page-body__container
 const addNewButtonElement = document.querySelector(`.trip-main__event-add-btn`);
 const [siteMenuHeader, siteFilterHeader] = siteControlsElement.querySelectorAll(`h2`);
 
-let destinationList = [];
-let offerList = [];
-
-const siteMenuComponent = new SiteMenuView();
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const eventsModel = new EventsModel();
 const filterModel = new FilterModel();
 
-const tripPresenter = new TripPresenter(siteMainElement, eventsModel, filterModel, destinationList, offerList);
+const tripPresenter = new TripPresenter(siteMainElement, eventsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(siteFilterHeader, filterModel, eventsModel);
 
-const api = new Api(END_POINT, AUTHORIZATION);
+const siteMenuComponent = new SiteMenuView();
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
