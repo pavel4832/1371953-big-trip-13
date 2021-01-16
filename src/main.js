@@ -43,9 +43,6 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
-render(siteMenuHeader, siteMenuComponent, RenderPosition.AFTER);
-siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-
 api.getDestinations()
   .then((destination) => {
     eventsModel.setDestination(UpdateType.INIT, destination);
@@ -65,6 +62,13 @@ api.getOffers()
 api.getEvents()
   .then((events) => {
     eventsModel.setEvents(UpdateType.INIT, events);
+    render(siteMenuHeader, siteMenuComponent, RenderPosition.AFTER);
+    siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  })
+  .catch(() => {
+    eventsModel.setEvents(UpdateType.INIT, []);
+    render(siteMenuHeader, siteMenuComponent, RenderPosition.AFTER);
+    siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
 
 filterPresenter.init();
