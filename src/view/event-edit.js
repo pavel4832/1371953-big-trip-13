@@ -73,7 +73,6 @@ export default class EventEdit extends SmartView {
     this._offerList = offerList;
 
     this._data = EventEdit.parseEventToData(event);
-    this._data.allOffers = getOffersByType(offerList, event.type);
     this._startDatepicker = null;
     this._endDatepicker = null;
 
@@ -185,7 +184,6 @@ export default class EventEdit extends SmartView {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
-      allOffers: getOffersByType(this._offerList, evt.target.value),
     });
   }
 
@@ -211,9 +209,10 @@ export default class EventEdit extends SmartView {
   }
 
   _offerToggleHandler(evt) {
+    evt.preventDefault();
     this.updateData({
       offers: this._setOffers(evt.target.name),
-      isOffers: true
+      isOffers: false
     });
   }
 
@@ -221,21 +220,18 @@ export default class EventEdit extends SmartView {
     const cutLetters = 12;
     const newTitle = newOffer.substr(cutLetters);
 
-    const newOfferItem = this._data.allOffers.find((offer) => offer.title === newTitle);
+    const currentOffers = getOffersByType(this._offerList, this._data.type);
+    const newOfferItem = currentOffers.find((offer) => offer.title === newTitle);
 
-    let newOffers = [];
-    console.log(newOffers);
-    console.log(newTitle);
+    let newOffers = this._data.offers;
 
-    const offerIndex = this._data.offers.findIndex((offer) => offer.title === newTitle);
-    console.log(offerIndex);
+    const offerIndex = newOffers.findIndex((offer) => offer.title === newTitle);
+
     if (offerIndex !== -1) {
-      newOffers = this._data.offers.splice(offerIndex, 1);
+      newOffers.splice(offerIndex, 1);
     } else {
-      newOffers = this._data.offers.push(newOfferItem);
+      newOffers.push(newOfferItem);
     }
-
-    console.log(newOffers);
 
     return newOffers;
   }
@@ -291,7 +287,6 @@ export default class EventEdit extends SmartView {
         {},
         event,
         {
-          allOffers: [],
           isStartDate: event.times.startDate !== null,
           isEndDate: event.times.endDate !== null,
           isOffers: false
