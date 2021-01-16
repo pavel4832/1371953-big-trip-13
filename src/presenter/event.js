@@ -119,13 +119,15 @@ export default class Event {
     const isMinorUpdate =
       !isDataEqual(this._event.destination, update.destination) ||
       !isDatesEqual(this._event.times, update.times) ||
-      !isDataEqual(this._event.price, update.price);
+      !isDataEqual(this._event.price, update.price) ||
+      !isDataEqual(this._event.offers, update.offers);
 
     this._changeData(
         UserAction.UPDATE_EVENT,
         isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
         update
     );
+
     this._replaceFormToCard();
   }
 

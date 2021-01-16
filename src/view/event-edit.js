@@ -196,16 +196,20 @@ export default class EventEdit extends SmartView {
 
       evt.preventDefault();
       this.updateData({
-        destination: EventEdit.setDestination(this._destinationList, evt.target.value)
+        destination: this._setDestination(this._destinationList, evt.target.value)
       });
     }
     evt.target.reportValidity();
   }
 
+  _setDestination(destinations, name) {
+    return destinations.find((destination) => destination.name === name);
+  }
+
   _priceToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      price: evt.target.value
+      price: parseInt(evt.target.value, 10)
     });
   }
 
@@ -298,15 +302,10 @@ export default class EventEdit extends SmartView {
   static parseDataToEvent(data) {
     let newData = Object.assign({}, data);
 
-    delete newData.allOffers;
     delete newData.isStartDate;
     delete newData.isEndDate;
     delete newData.isOffers;
 
     return newData;
-  }
-
-  static setDestination(destinations, name) {
-    return destinations.find((destination) => destination.name === name);
   }
 }

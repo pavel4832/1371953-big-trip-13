@@ -126,6 +126,7 @@ export default class Trip {
     switch (updateType) {
       case UpdateType.PATCH:
         this._eventPresenterList[data.id].init(data);
+        this._renderTripInfo();
         break;
       case UpdateType.MINOR:
         this._clearTrip();
@@ -210,8 +211,6 @@ export default class Trip {
       .values(this._eventPresenterList)
       .forEach((presenter) => presenter.destroy());
     this._eventPresenterList = {};
-
-    this._infoPresenter.destroy();
 
     remove(this._sortComponent);
     remove(this._noEventsComponent);
