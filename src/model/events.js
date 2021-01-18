@@ -77,8 +77,8 @@ export default class Events extends Observer {
   }
 
   static adaptToClient(event) {
-    const startDate = dayjs(new Date(event.date_from));
-    const endDate = dayjs(new Date(event.date_to));
+    const startDate = dayjs(event.date_from);
+    const endDate = dayjs(event.date_to);
 
     const adaptedEvent = Object.assign(
         {},
