@@ -3,12 +3,14 @@ import AbstractView from "./abstract-view.js";
 const createTripCostTemplate = (events) => {
   let totalPrice = 0;
 
-  for (let i = 0; i < events.length; i++) {
+  for (let event of events) {
     let offerPrice = 0;
-    events[i].offers.forEach((offer) => {
+
+    event.offers.forEach((offer) => {
       offerPrice += offer.price;
     });
-    totalPrice += events[i].price + offerPrice;
+
+    totalPrice = totalPrice + event.price + offerPrice;
   }
 
   return `<p class="trip-info__cost">

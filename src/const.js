@@ -1,3 +1,22 @@
+import {getTimes} from "./utils/event";
+import dayjs from "dayjs";
+
+export const RADIX = 10;
+
+export const BLANK_EVENT = {
+  type: `taxi`,
+  destination: {
+    description: ``,
+    name: ``,
+    pictures: []
+  },
+  times: getTimes(dayjs(), dayjs()),
+  price: 0,
+  offers: [],
+  isFavorite: false,
+  isNew: true
+};
+
 export const MenuItem = {
   TABLE: `Table`,
   STATISTICS: `Stats`
@@ -15,6 +34,19 @@ export const SortType = {
   PRICE: `sort-price`
 };
 
+export const EventType = {
+  "taxi": `Taxi`,
+  "bus": `Bus`,
+  "train": `Train`,
+  "ship": `Ship`,
+  "transport": `Transport`,
+  "drive": `Drive`,
+  "flight": `Flight`,
+  "check-in": `Check-in`,
+  "sightseeing": `Sightseeing`,
+  "restaurant": `Restaurant`
+};
+
 export const UserAction = {
   UPDATE_EVENT: `UPDATE_EVENT`,
   ADD_EVENT: `ADD_EVENT`,
@@ -24,5 +56,6 @@ export const UserAction = {
 export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };

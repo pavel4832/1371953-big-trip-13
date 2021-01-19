@@ -1,5 +1,5 @@
-import {FilterType} from "../const";
-import {isEventFuture, isEventPast} from "./event";
+import {FilterType} from "../const.js";
+import {isEventFuture, isEventPast} from "./event.js";
 
 export const filter = {
   [FilterType.EVERYTHING]: (events) => events,

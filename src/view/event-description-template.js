@@ -1,14 +1,11 @@
-import {createEventEditPhotosTemplate} from "./event-photos-template";
+import {createEventEditPhotosTemplate} from "./event-photos-template.js";
 
-export const createEventEditDescriptionTemplate = (information, isInformation, isPhotos) => {
-  const description = isInformation ? information.description : ``;
-  const photos = isPhotos ? information.photos : ``;
+export const createEventEditDescriptionTemplate = (destination) => {
+  const photosTemplate = createEventEditPhotosTemplate(destination.pictures);
 
-  const photosTemplate = isPhotos ? createEventEditPhotosTemplate(photos) : ``;
-
-  return isInformation ? `<section class="event__section  event__section--destination">
+  return `<section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${description}</p>
+            <p class="event__destination-description">${destination.description}</p>
             ${photosTemplate}
-          </section>` : ``;
+          </section>`;
 };

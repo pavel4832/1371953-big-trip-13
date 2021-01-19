@@ -1,5 +1,34 @@
 import dayjs from "dayjs";
 
+const HOUR_COUNT = 24;
+const MINUTES_COUNT = 60;
+
+export const getTimes = (startDate, endDate) => {
+  const differenceDay = endDate.diff(startDate, `day`);
+  const differenceHour = endDate.diff(startDate, `hour`) - differenceDay * HOUR_COUNT;
+  const differenceMinutes = endDate.diff(startDate, `minute`) - (differenceDay * HOUR_COUNT + differenceHour) * MINUTES_COUNT;
+
+  let duration;
+
+  if (differenceDay === 0) {
+    duration = (differenceHour === 0) ? `${differenceMinutes}M` : `${differenceHour}H ${differenceMinutes}M`;
+  } else {
+    duration = `${differenceDay}D ${differenceHour}H ${differenceMinutes}M`;
+  }
+
+  return {
+    startDate,
+    endDate,
+    duration
+  };
+};
+
+export const getOffersByType = (allOffers, type) => {
+  const currentOfferElement = allOffers.find((offer) => offer.type === type);
+
+  return currentOfferElement.offers;
+};
+
 export const sortEventDay = (eventA, eventB) => {
   return eventA.times.startDate - eventB.times.startDate;
 };

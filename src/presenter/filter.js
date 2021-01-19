@@ -19,13 +19,13 @@ export default class Filter {
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
-  init() {
+  init(isStats) {
     this._currentFilter = this._filterModel.getFilter();
 
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new FilterView(filters, this._currentFilter);
+    this._filterComponent = new FilterView(filters, this._currentFilter, isStats);
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
@@ -37,8 +37,8 @@ export default class Filter {
     remove(prevFilterComponent);
   }
 
-  _handleModelEvent() {
-    this.init();
+  _handleModelEvent(...rest) {
+    this.init(rest[rest.length - 1]);
   }
 
   _handleFilterTypeChange(filterType) {
