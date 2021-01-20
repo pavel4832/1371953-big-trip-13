@@ -63,7 +63,7 @@ const createEventEditTemplate = (data, destinationList, offerList) => {
                     value="${startTime}"
                     ${isDisabled ? `disabled` : ``}
                   >
-                  &mda
+                  &mdash;
                   <label class="visually-hidden" for="event-end-time-1">To</label>
                   <input
                     class="event__input  event__input--time"
