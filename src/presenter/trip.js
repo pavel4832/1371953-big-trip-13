@@ -66,12 +66,14 @@ export default class Trip {
   }
 
   changeTableToStats() {
+    this._tripContainer.classList.add(`page-body__stats`);
     this._boardComponent.hideElement();
     this._statisticsComponent.showElement();
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING, true);
   }
 
   changeStatsToTable() {
+    this._tripContainer.classList.remove(`page-body__stats`);
     this._boardComponent.showElement();
     this._statisticsComponent.hideElement();
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING, false);
