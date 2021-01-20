@@ -12,18 +12,31 @@ import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createEventEditTemplate = (data, destinationList, offerList) => {
-  const {type, destination, times, price, offers, isNew, isStartDate, isEndDate, isOffers} = data;
+  const {
+    type,
+    destination,
+    times,
+    price,
+    offers,
+    isNew,
+    isStartDate,
+    isEndDate,
+    isOffers,
+    isDisabled,
+    isSaving,
+    isDeleting
+  } = data;
   const startTime = times.startDate.format(`DD/MM/YY HH:mm`);
   const endTime = times.endDate.format(`DD/MM/YY HH:mm`);
 
-  const typeIconTemplate = createEventTypeIconTemplate(type);
+  const typeIconTemplate = createEventTypeIconTemplate(type, isDisabled);
   const typeTemplate = createEventTypeTemplate(type);
-  const destinationTemplate = createEventDestinationTemplate(destination, destinationList);
-  const offerTemplate = createEventEditOffersTemplate(type, offerList, offers, isOffers);
+  const destinationTemplate = createEventDestinationTemplate(destination, destinationList, isDisabled);
+  const offerTemplate = createEventEditOffersTemplate(type, offerList, offers, isOffers, isDisabled);
   const descriptionTemplate = createEventEditDescriptionTemplate(destination, destinationList);
   const isSubmitDisabled = (isStartDate && startTime === null) || (isEndDate && endTime === null);
 
-  const closeButtonText = (isNew) ? `Cancel` : `Delete`;
+  const closeButtonText = (isNew) ? `Cancel` : `${isDeleting ? `Deleting...` : `Delete`}`;
   const rollButton = (!isNew) ? `<button class="event__rollup-btn" type="button">
                                    <span class="visually-hidden">Open event</span>
                                  </button>` : ``;
@@ -41,10 +54,25 @@ const createEventEditTemplate = (data, destinationList, offerList) => {
 
                 <div class="event__field-group  event__field-group--time">
                   <label class="visually-hidden" for="event-start-time-1">From</label>
-                  <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startTime}">
-                  &mdash;
+                  <input
+                    class="event__input
+                    event__input--time"
+                    id="event-start-time-1"
+                    type="text"
+                    name="event-start-time"
+                    value="${startTime}"
+                    ${isDisabled ? `disabled` : ``}
+                  >
+                  &mda
                   <label class="visually-hidden" for="event-end-time-1">To</label>
-                  <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endTime}">
+                  <input
+                    class="event__input  event__input--time"
+                    id="event-end-time-1"
+                    type="text"
+                    name="event-end-time"
+                    value="${endTime}"
+                    ${isDisabled ? `disabled` : ``}
+                  >
                 </div>
 
                 <div class="event__field-group  event__field-group--price">
@@ -52,10 +80,19 @@ const createEventEditTemplate = (data, destinationList, offerList) => {
                     <span class="visually-hidden">Price</span>
                     &euro;
                   </label>
-                  <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
+                  <input
+                    class="event__input  event__input--price"
+                    id="event-price-1"
+                    type="number"
+                    name="event-price"
+                    value="${price}"
+                    ${isDisabled ? `disabled` : ``}
+                  >
                 </div>
 
-                <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
+                <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>
+                    ${isSaving ? `Saving...` : `Save`}
+                </button>
                 <button class="event__reset-btn" type="reset">${closeButtonText}</button>
                 ${rollButton}
               </header>
@@ -295,7 +332,10 @@ export default class EventEdit extends SmartView {
         {
           isStartDate: event.times.startDate !== null,
           isEndDate: event.times.endDate !== null,
-          isOffers: false
+          isOffers: false,
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false
         }
     );
   }
@@ -306,6 +346,9 @@ export default class EventEdit extends SmartView {
     delete newData.isStartDate;
     delete newData.isEndDate;
     delete newData.isOffers;
+    delete newData.isDisabled;
+    delete newData.isSaving;
+    delete newData.isDeleting;
 
     return newData;
   }
