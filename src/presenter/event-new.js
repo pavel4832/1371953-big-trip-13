@@ -1,5 +1,4 @@
 import EventEditView from "../view/event-edit.js";
-import {generateId} from "../utils/common.js";
 import {remove, render, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType, BLANK_EVENT} from "../const.js";
 
@@ -46,7 +45,7 @@ export default class EventNew {
     this._changeData(
         UserAction.ADD_EVENT,
         UpdateType.MINOR,
-        Object.assign({id: generateId()}, event, {isNew: false}));
+        Object.assign(event, {isNew: false}));
     this.destroy();
   }
 
