@@ -20,16 +20,19 @@ export default class Api {
 
   getDestinations() {
     return this._load({url: `destinations`})
+      .then(Api.toJSON)
       .then((destinations) => destinations);
   }
 
   getOffers() {
     return this._load({url: `offers`})
+      .then(Api.toJSON)
       .then((offers) => offers);
   }
 
   getEvents() {
     return this._load({url: `points`})
+      .then(Api.toJSON)
       .then((events) => events.map(EventsModel.adaptToClient));
   }
 
@@ -75,7 +78,6 @@ export default class Api {
         {method, body, headers}
     )
       .then(Api.checkStatus)
-      .then(Api.toJSON)
       .catch(Api.catchError);
   }
 

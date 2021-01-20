@@ -8,7 +8,7 @@ const createEventsItemTemplate = (event) => {
   const startTime = times.startDate.format();
   const endTime = times.endDate.format();
 
-  const favoriteClassName = isFavorite
+  const favoriteClassName = (!isFavorite)
     ? `event__favorite-btn`
     : `event__favorite-btn event__favorite-btn--active`;
 
