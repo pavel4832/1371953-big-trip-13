@@ -106,8 +106,8 @@ export default class Events extends Observer {
         {},
         event,
         {
-          "date_from": times.startDate instanceof Date ? times.startDate.toISOString() : null,
-          "date_to": times.endDate instanceof Date ? times.endDate.toISOString() : null,
+          "date_from": times.startDate.isValid() ? times.startDate.toISOString() : null,
+          "date_to": times.endDate.isValid() ? times.endDate.toISOString() : null,
           "base_price": event.price,
           "is_favorite": event.isFavorite,
         }

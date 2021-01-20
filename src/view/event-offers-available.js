@@ -1,4 +1,4 @@
-export const createEventEditOffersTemplate = (type, allOffers, checkedOffers, isOffers) => {
+export const createEventEditOffersTemplate = (type, allOffers, checkedOffers, isOffers, isDisabled) => {
   const currentOfferElement = allOffers.find((offer) => offer.type === type);
   const currentOfferList = currentOfferElement.offers;
 
@@ -17,7 +17,14 @@ export const createEventEditOffersTemplate = (type, allOffers, checkedOffers, is
     }
 
     offerList += `<div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${idName}" type="checkbox" name="event-offer-${idName}" ${checked}>
+                    <input
+                        class="event__offer-checkbox  visually-hidden"
+                        id="event-offer-${idName}"
+                        type="checkbox"
+                        name="event-offer-${idName}"
+                        ${checked}
+                        ${isDisabled ? `disabled` : ``}
+                    >
                       <label class="event__offer-label" for="event-offer-${idName}">
                         <span class="event__offer-title">${offer.title}</span>
                         &plus;&euro;&nbsp;

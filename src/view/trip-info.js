@@ -10,7 +10,7 @@ const createTripInfoTemplate = (events) => {
 
   if (events.length <= 3) {
     events.forEach((event) => {
-      trip.push(event.destination);
+      trip.push(event.destination.name);
     });
   } else {
     trip.push(events[0].destination.name);

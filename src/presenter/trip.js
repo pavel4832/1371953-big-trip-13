@@ -5,7 +5,7 @@ import NoEventsView from "../view/no-events.js";
 import StatisticsView from "../view/statistics.js";
 import LoadingView from "../view/loading.js";
 import InfoPresenter from "./info.js";
-import EventPresenter from "./event.js";
+import EventPresenter, {State as EventPresenterViewState} from "./event.js";
 import EventNewPresenter from "./event-new.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortEventDay, sortEventTime, sortEventPrice} from "../utils/event.js";
@@ -66,12 +66,14 @@ export default class Trip {
   }
 
   changeTableToStats() {
+    this._tripContainer.classList.add(`page-body__stats`);
     this._boardComponent.hideElement();
     this._statisticsComponent.showElement();
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING, true);
   }
 
   changeStatsToTable() {
+    this._tripContainer.classList.remove(`page-body__stats`);
     this._boardComponent.showElement();
     this._statisticsComponent.hideElement();
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING, false);
@@ -107,15 +109,34 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
-        this._api.updateEvent(update).then((response) => {
-          this._eventsModel.updateEvent(updateType, response);
-        });
+        this._eventPresenterList[update.id].setViewState(EventPresenterViewState.SAVING);
+        this._api.updateEvent(update)
+          .then((response) => {
+            this._eventsModel.updateEvent(updateType, response);
+          })
+          .catch(() => {
+            this._eventPresenterList[update.id].setViewState(EventPresenterViewState.ABORTING);
+          });
         break;
       case UserAction.ADD_EVENT:
-        this._eventsModel.addEvent(updateType, update);
+        this._eventNewPresenter.setSaving();
+        this._api.addEvent(update)
+          .then((response) => {
+            this._eventsModel.addEvent(updateType, response);
+          })
+          .catch(() => {
+            this._eventNewPresenter.setAborting();
+          });
         break;
       case UserAction.DELETE_EVENT:
-        this._eventsModel.deleteEvent(updateType, update);
+        this._eventPresenterList[update.id].setViewState(EventPresenterViewState.DELETING);
+        this._api.deleteEvent(update)
+          .then(() => {
+            this._eventsModel.deleteEvent(updateType, update);
+          })
+          .catch(() => {
+            this._eventPresenterList[update.id].setViewState(EventPresenterViewState.ABORTING);
+          });
         break;
     }
   }
