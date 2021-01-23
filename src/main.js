@@ -5,7 +5,7 @@ import EventsModel from "./model/events.js";
 import FilterModel from "./model/filter.js";
 import {render, RenderPosition} from "./utils/render.js";
 import {MenuItem, UpdateType} from "./const.js";
-import Api from "./api.js";
+import Api from "./api/api.js";
 
 const AUTHORIZATION = `Basic hsjkjhfgajks434jka845`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
