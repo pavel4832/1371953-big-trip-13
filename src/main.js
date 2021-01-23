@@ -75,3 +75,7 @@ addNewButtonElement.addEventListener(`click`, (evt) => {
   evt.preventDefault();
   tripPresenter.createEvent();
 });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`./sw.js`);
+});
