@@ -32,6 +32,21 @@ export default class Store {
     );
   }
 
+  setDataByKey(key, items) {
+    this._storage.setItem(
+        key,
+        JSON.stringify(items)
+    );
+  }
+
+  getDataByKey(key) {
+    try {
+      return JSON.parse(this._storage.getItem(key)) || [];
+    } catch (err) {
+      return [];
+    }
+  }
+
   removeItem(key) {
     const store = this.getItems();
 
