@@ -1,6 +1,5 @@
 import EventsModel from "../model/events.js";
 import {isOnline} from "../utils/common.js";
-import {UpdateType} from "../const";
 
 const DataKeys = {
   OFFERS: `OFFERS`,
@@ -21,10 +20,9 @@ const createStoreStructure = (items) => {
 };
 
 export default class Provider {
-  constructor(api, store, eventsModel) {
+  constructor(api, store) {
     this._api = api;
     this._store = store;
-    this._eventsModel = eventsModel;
   }
 
   getDestinations() {
@@ -64,24 +62,6 @@ export default class Provider {
     const storeEvents = Object.values(this._store.getItems());
 
     return Promise.resolve(storeEvents.map(EventsModel.adaptToClient));
-  }
-
-  getAllDataFromServer() {
-    return Promise
-      .all([
-        this.getEvents(),
-        this.getDestinations(),
-        this.getOffers()
-      ])
-      .then(([destination, offers, events]) => {
-        this._eventsModel.setDestination(UpdateType.INIT, destination);
-        this._eventsModel.setOffers(UpdateType.INIT, offers);
-        return events;
-      })
-      .catch(() => {
-        this._store.setDataByKey(DataKeys.DESTINATIONS, []);
-        this._store.setDataByKey(DataKeys.OFFERS, []);
-      });
   }
 
   updateEvent(event) {

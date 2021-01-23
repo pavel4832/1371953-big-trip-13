@@ -3,6 +3,8 @@ import EventEditView from "../view/event-edit.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
 import {isDataEqual, isDatesEqual} from "../utils/event.js";
+import {isOnline} from "../utils/common.js";
+import {toast} from "../utils/toast/toast.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -147,11 +149,21 @@ export default class Event {
       this._eventEditComponent.reset(this._event);
       this._replaceFormToCard();
     } else {
+      if (!isOnline()) {
+        toast(`You can't edit event offline`);
+        return;
+      }
+
       this._replaceCardToForm();
     }
   }
 
   _handleFormSubmit(update) {
+    if (!isOnline()) {
+      toast(`You can't save event offline`);
+      return;
+    }
+
     const isMinorUpdate =
       !isDataEqual(this._event.destination, update.destination) ||
       !isDatesEqual(this._event.times, update.times) ||
@@ -166,6 +178,11 @@ export default class Event {
   }
 
   _handleDeleteClick(event) {
+    if (!isOnline()) {
+      toast(`You can't delete event offline`);
+      return;
+    }
+
     this._changeData(
         UserAction.DELETE_EVENT,
         UpdateType.MINOR,
