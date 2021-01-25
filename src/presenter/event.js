@@ -4,7 +4,7 @@ import {render, replace, remove, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
 import {isDataEqual, isDatesEqual} from "../utils/event.js";
 import {isOnline} from "../utils/common.js";
-import {toast} from "../utils/toast/toast.js";
+import {toast} from "../utils/toast.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,

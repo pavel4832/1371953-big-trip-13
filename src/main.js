@@ -5,7 +5,7 @@ import EventsModel from "./model/events.js";
 import FilterModel from "./model/filter.js";
 import {isOnline} from "./utils/common.js";
 import {render, RenderPosition} from "./utils/render.js";
-import {toast} from "./utils/toast/toast.js";
+import {toast} from "./utils/toast.js";
 import {MenuItem, UpdateType} from "./const.js";
 import Api from "./api/api.js";
 import Store from "./api/store.js";
@@ -66,6 +66,7 @@ Promise.all([
     eventsModel.setDestination(UpdateType.INIT, []);
     eventsModel.setOffers(UpdateType.INIT, []);
     eventsModel.setEvents(UpdateType.INIT, []);
+
     render(siteMenuHeader, siteMenuComponent, RenderPosition.AFTER);
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
