@@ -5,7 +5,7 @@ const createTripInfoTemplate = (events) => {
   const startDay = events[0].times.startDate;
   const endDay = events[events.length - 1].times.endDate;
 
-  let trip = [];
+  const trip = [];
   let time;
 
   if (events.length <= 3) {

@@ -266,7 +266,7 @@ export default class EventEdit extends SmartView {
     const currentOffers = getOffersByType(this._offerList, this._data.type);
     const newOfferItem = currentOffers.find((offer) => offer.title === newTitle);
 
-    let newOffers = this._data.offers;
+    const newOffers = this._data.offers;
 
     const offerIndex = newOffers.findIndex((offer) => offer.title === newTitle);
 
@@ -341,7 +341,7 @@ export default class EventEdit extends SmartView {
   }
 
   static parseDataToEvent(data) {
-    let newData = Object.assign({}, data);
+    const newData = Object.assign({}, data);
 
     delete newData.isStartDate;
     delete newData.isEndDate;

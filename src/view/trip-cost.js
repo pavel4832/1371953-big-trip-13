@@ -3,7 +3,7 @@ import AbstractView from "./abstract-view.js";
 const createTripCostTemplate = (events) => {
   let totalPrice = 0;
 
-  for (let event of events) {
+  for (const event of events) {
     let offerPrice = 0;
 
     event.offers.forEach((offer) => {
