@@ -204,7 +204,6 @@ export default class EventEdit extends SmartView {
       this._endDatepicker.destroy();
       this._endDatepicker = null;
     }
-
     this._endDatepicker = flatpickr(
         this.getElement().querySelector(`#event-end-time-1`),
         {
@@ -212,10 +211,26 @@ export default class EventEdit extends SmartView {
           altInput: true,
           altFormat: `d/m/y H:i`,
           dateFormat: `Y-m-d`,
+          minDate: this._data.times.startDate.toDate(),
           defaultDate: this._data.times.endDate.toDate(),
           onChange: this._endDateChangeHandler
-        }
-    );
+        });
+  }
+
+  _startDateChangeHandler([date]) {
+    const newStartDate = dayjs(date);
+
+    this.updateData({
+      times: getTimes(newStartDate, this._data.times.endDate)
+    });
+  }
+
+  _endDateChangeHandler([date]) {
+    const newEndDate = dayjs(date);
+
+    this.updateData({
+      times: getTimes(this._data.times.startDate, newEndDate)
+    });
   }
 
   _eventTypeToggleHandler(evt) {
@@ -294,22 +309,6 @@ export default class EventEdit extends SmartView {
   setRollupClickHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._clickHandler);
-  }
-
-  _startDateChangeHandler([date]) {
-    const newStartDate = dayjs(date);
-
-    this.updateData({
-      times: getTimes(newStartDate, this._data.times.endDate)
-    });
-  }
-
-  _endDateChangeHandler([date]) {
-    const newEndDate = dayjs(date);
-
-    this.updateData({
-      times: getTimes(this._data.times.startDate, newEndDate)
-    });
   }
 
   _formDeleteClickHandler(evt) {
