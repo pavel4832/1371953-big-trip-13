@@ -150,6 +150,7 @@ export default class Event {
       this._replaceFormToCard();
     } else {
       if (!isOnline()) {
+        this.setViewState(State.ABORTING);
         toast(`You can't edit event offline`);
         return;
       }
@@ -160,6 +161,7 @@ export default class Event {
 
   _handleFormSubmit(update) {
     if (!isOnline()) {
+      this.setViewState(State.ABORTING);
       toast(`You can't save event offline`);
       return;
     }
@@ -179,6 +181,7 @@ export default class Event {
 
   _handleDeleteClick(event) {
     if (!isOnline()) {
+      this.setViewState(State.ABORTING);
       toast(`You can't delete event offline`);
       return;
     }

@@ -144,6 +144,7 @@ export default class EventEdit extends SmartView {
   }
 
   reset(event) {
+    this._removeInnerHandlers();
     this.updateData(
         EventEdit.parseEventToData(event)
     );
@@ -178,6 +179,21 @@ export default class EventEdit extends SmartView {
     this.getElement()
       .querySelectorAll(`.event__offer-checkbox`)
       .forEach((offer) => offer.addEventListener(`click`, this._offerToggleHandler));
+  }
+
+  _removeInnerHandlers() {
+    this.getElement()
+      .querySelector(`.event__type-group`)
+      .removeEventListener(`change`, this._eventTypeToggleHandler);
+    this.getElement()
+      .querySelector(`.event__input--destination`)
+      .removeEventListener(`change`, this._destinationToggleHandler);
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .removeEventListener(`change`, this._priceToggleHandler);
+    this.getElement()
+      .querySelectorAll(`.event__offer-checkbox`)
+      .forEach((offer) => offer.removeEventListener(`click`, this._offerToggleHandler));
   }
 
   _setStartDatepicker() {
