@@ -6,9 +6,9 @@ const createTripInfoTemplate = (events) => {
   const endDay = events[events.length - 1].times.endDate;
 
   const tripDestinationsName = Array.from(new Set(events.map((event) => event.destination.name)));
+  const tripDestinations = [];
 
   let time;
-  let tripDestinations = [];
 
   if (tripDestinationsName.length <= 3) {
     tripDestinationsName.forEach((name) => {
