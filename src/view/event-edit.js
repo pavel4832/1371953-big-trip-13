@@ -33,7 +33,7 @@ const createEventEditTemplate = (data, destinationList, offerList) => {
   const typeTemplate = createEventTypeTemplate(type);
   const destinationTemplate = createEventDestinationTemplate(destination, destinationList, isDisabled);
   const offerTemplate = createEventEditOffersTemplate(type, offerList, offers, isOffers, isDisabled);
-  const descriptionTemplate = createEventEditDescriptionTemplate(destination, destinationList);
+  const descriptionTemplate = (destination.description !== ``) ? createEventEditDescriptionTemplate(destination, destinationList) : ``;
   const isSubmitDisabled = (isStartDate && startTime === null) || (isEndDate && endTime === null);
 
   const closeButtonText = (isNew) ? `Cancel` : `${isDeleting ? `Deleting...` : `Delete`}`;
