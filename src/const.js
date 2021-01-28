@@ -11,7 +11,7 @@ export const BLANK_EVENT = {
     pictures: []
   },
   times: getTimes(dayjs(), dayjs()),
-  price: 0,
+  price: ``,
   offers: [],
   isFavorite: false,
   isNew: true

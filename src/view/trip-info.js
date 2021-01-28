@@ -5,17 +5,17 @@ const createTripInfoTemplate = (events) => {
   const startDay = events[0].times.startDate;
   const endDay = events[events.length - 1].times.endDate;
 
-  const trips = [];
+  const tripDestinatons = [];
   let time;
 
   if (events.length <= 3) {
     events.forEach((event) => {
-      trips.push(event.destination.name);
+      tripDestinatons.push(event.destination.name);
     });
   } else {
-    trips.push(events[0].destination.name);
-    trips.push(`...`);
-    trips.push(events[events.length - 1].destination.name);
+    tripDestinatons.push(events[0].destination.name);
+    tripDestinatons.push(`...`);
+    tripDestinatons.push(events[events.length - 1].destination.name);
   }
 
   if (startDay.diff(endDay, `month`) === 0) {
@@ -26,7 +26,7 @@ const createTripInfoTemplate = (events) => {
 
   return `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
-              <h1 class="trip-info__title">${trips.join(` - `)}</h1>
+              <h1 class="trip-info__title">${tripDestinatons.join(` - `)}</h1>
 
               <p class="trip-info__dates">${time}</p>
             </div>

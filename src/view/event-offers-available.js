@@ -4,7 +4,7 @@ export const createEventEditOffersTemplate = (type, allOffers, checkedOffers, is
 
   let offerList = ``;
 
-  currentOfferList .forEach((offer) => {
+  currentOfferList.forEach((offer) => {
     const idName = offer.title;
     let checked = ``;
 

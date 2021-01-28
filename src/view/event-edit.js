@@ -253,8 +253,9 @@ export default class EventEdit extends SmartView {
 
   _offerToggleHandler(evt) {
     evt.preventDefault();
+    this._setOffers(evt.target.name);
     this.updateData({
-      offers: this._setOffers(evt.target.name),
+      offers: this._data.offers,
       isOffers: false
     });
   }
@@ -266,17 +267,13 @@ export default class EventEdit extends SmartView {
     const currentOffers = getOffersByType(this._offerList, this._data.type);
     const newOfferItem = currentOffers.find((offer) => offer.title === newTitle);
 
-    const newOffers = this._data.offers;
-
-    const offerIndex = newOffers.findIndex((offer) => offer.title === newTitle);
+    const offerIndex = this._data.offers.findIndex((offer) => offer.title === newTitle);
 
     if (offerIndex !== -1) {
-      newOffers.splice(offerIndex, 1);
+      this._data.offers.splice(offerIndex, 1);
     } else {
-      newOffers.push(newOfferItem);
+      this._data.offers.push(newOfferItem);
     }
-
-    return newOffers;
   }
 
   _clickHandler(evt) {
@@ -330,6 +327,7 @@ export default class EventEdit extends SmartView {
         {},
         event,
         {
+          offers: event.offers.slice(),
           isStartDate: event.times.startDate !== null,
           isEndDate: event.times.endDate !== null,
           isOffers: false,
