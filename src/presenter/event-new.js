@@ -14,6 +14,8 @@ export default class EventNew {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+
+    this._addNewButtonElement = document.querySelector(`.trip-main__event-add-btn`);
   }
 
   init() {
@@ -28,6 +30,7 @@ export default class EventNew {
     render(this._eventListContainer, this._eventEditComponent, RenderPosition.AFTERBEGIN);
 
     document.addEventListener(`keydown`, this._escKeyDownHandler);
+    this._addNewButtonElement.disabled = true;
   }
 
   destroy() {
@@ -39,6 +42,7 @@ export default class EventNew {
     this._eventEditComponent = null;
 
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    this._addNewButtonElement.disabled = false;
   }
 
   setSaving() {
